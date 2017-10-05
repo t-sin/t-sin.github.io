@@ -11,22 +11,20 @@
 body {
     font-family: @font-main;
     font-weight: 300;
-    padding: 0 5em;
     background-color: @bg;
     color: @text;
 }
 
 header {
-    padding: 4em;
+    padding: 2em;
     background-color: @bg2;
 
     h1 {
+        margin: 0;
         border-bottom: solid 1px @acent;
 
         font-family: @font-title;
-	font-weight: 400;
-        font-size: 4.5em;
-        font-feature-settings: "palt" 1;
+	    font-weight: 400;
         text-align: center;
     }
 
@@ -37,14 +35,46 @@ header {
 }
 
 footer {
-    padding: 2em 5em;
+    padding: 1em 2em;
 
     p {
+        padding-top: 0.5em;
         border-top: solid 1px @acent;
         text-align: center;
     }
 }
 
-main {
-    padding: 0 2em;
+main section {
+    padding: 1em 2em;
 }
+
+@media screen and (min-width: 48em) {
+    header {
+        padding: 5em 5em 5em;
+
+        h1 {
+            font-size: 4.5em;
+        }
+    }
+
+    footer {
+        padding: 2em 5em 1em;
+    }
+
+    main {
+        section {
+            width: 500px;
+            margin: 0 auto;
+        }
+    }
+}
+
+@media screen and (min-width: 64em) {
+    main {
+        section {
+            width: 750px;
+            margin: 0 auto;
+        }
+    }
+}
+

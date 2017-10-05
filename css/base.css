@@ -2,20 +2,18 @@
 body {
   font-family: "source-han-sans-japanese";
   font-weight: 300;
-  padding: 0 5em;
   background-color: #f0f7f4;
   color: #121619;
 }
 header {
-  padding: 4em;
+  padding: 2em;
   background-color: #ffffff;
 }
 header h1 {
+  margin: 0;
   border-bottom: solid 1px #276820;
   font-family: "adelle";
   font-weight: 400;
-  font-size: 4.5em;
-  font-feature-settings: "palt" 1;
   text-align: center;
 }
 header h1::first-letter {
@@ -23,12 +21,34 @@ header h1::first-letter {
   color: #276820;
 }
 footer {
-  padding: 2em 5em;
+  padding: 1em 2em;
 }
 footer p {
+  padding-top: 0.5em;
   border-top: solid 1px #276820;
   text-align: center;
 }
-main {
-  padding: 0 2em;
+main section {
+  padding: 1em 2em;
+}
+@media screen and (min-width: 48em) {
+  header {
+    padding: 5em 5em 5em;
+  }
+  header h1 {
+    font-size: 4.5em;
+  }
+  footer {
+    padding: 2em 5em 1em;
+  }
+  main section {
+    width: 500px;
+    margin: 0 auto;
+  }
+}
+@media screen and (min-width: 64em) {
+  main section {
+    width: 750px;
+    margin: 0 auto;
+  }
 }
