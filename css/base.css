@@ -12,14 +12,14 @@ header {
 }
 header h1 {
   border-bottom: solid 1px #276820;
-  font-family: "angie-sans";
+  font-family: "adelle";
+  font-weight: 400;
   font-size: 4.5em;
   font-feature-settings: "palt" 1;
   text-align: center;
 }
 header h1::first-letter {
   font-size: 1.2em;
-  letter-spacing: -0.05em;
   color: #276820;
 }
 footer {
