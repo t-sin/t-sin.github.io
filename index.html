@@ -10,18 +10,27 @@
          font-family: "source-han-sans-japanese";
          font-weight: 300;
          padding: 0 5em;
+         background-color: #f0f7f4;
+         color: #121619;
      }
      header {
-         padding: 5em;
+         padding: 4em;
+         background-color: #ffffff;
      }
      header h1 {
-         border-bottom: solid 1px #000;
+         border-bottom: solid 1px #276820;
 
          font-family: "angie-sans";
-         font-size: 4em;
-         letter-spacing: 0.05em;
+         font-size: 4.5em;
+         font-feature-settings: "palt" 1;
+         /*letter-spacing: 0.05em;*/
          text-align: center;
          /*text-shadow: 15px 9px 20px rgba(0, 0, 0, 0.61);*/
+     }
+     header h1::first-letter {
+         font-size: 1.2em;
+         letter-spacing: -0.05em;
+         color: #276820;
      }
      footer {
          padding: 2em 5em;
