@@ -1,0 +1,35 @@
+#|-*- mode:lisp -*-|#
+(in-package :cl-user)
+(defpackage :lake.user
+  (:use :cl :lake :cl-syntax)
+  (:shadowing-import-from :lake
+                          :directory))
+(in-package :lake.user)
+(use-syntax :interpol)
+
+(defparameter lessc "./node_modules/less/bin/lessc")
+(defparameter npmdir "./node_modules/")
+
+(task "default" ("assets"))
+
+(task "assets" ("js"
+                "css"))
+
+(directory "./js")
+(directory "./css")
+
+;;; css task
+(task "css" ("./css"
+             "sitecss"
+             "purecss"))
+
+(task "purecss" ("css/pure-min.css"))
+(file "css/pure-min.css" ("node_modules/purecss/build/pure-min.css")
+  (sh #?"cp ${npmdir}/purecss/build/pure-min.css css/pure-min.css"))
+
+(task "sitecss" ("css/base.css"))
+(file "css/base.css" ("less/base.less")
+  (sh #?"${lessc} less/base.less css/base.css"))
+
+;;; cs task
+(task "js" ("./js"))

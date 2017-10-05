@@ -1,0 +1,50 @@
+/* theme colours */
+@text: rgba(18, 22, 25, 1);
+@acent: rgba(39, 104, 32, 1);
+@acent2: rgba(219, 80, 74, 1);
+@bg: rgba(240, 247, 244, 1);
+@bg2: rgba(255, 255, 255, 1);
+
+@font-title: "angie-sans";
+@font-main: "source-han-sans-japanese";
+
+body {
+    font-family: @font-main;
+    font-weight: 300;
+    padding: 0 5em;
+    background-color: @bg;
+    color: @text;
+}
+
+header {
+    padding: 4em;
+    background-color: @bg2;
+
+    h1 {
+        border-bottom: solid 1px @acent;
+
+        font-family: @font-title;
+        font-size: 4.5em;
+        font-feature-settings: "palt" 1;
+        text-align: center;
+    }
+
+    h1::first-letter {
+        font-size: 1.2em;
+        letter-spacing: -0.05em;
+        color: @acent;
+    }
+}
+
+footer {
+    padding: 2em 5em;
+
+    p {
+        border-top: solid 1px @acent;
+        text-align: center;
+    }
+}
+
+main {
+    padding: 0 2em;
+}

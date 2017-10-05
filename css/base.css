@@ -1,0 +1,34 @@
+/* theme colours */
+body {
+  font-family: "source-han-sans-japanese";
+  font-weight: 300;
+  padding: 0 5em;
+  background-color: #f0f7f4;
+  color: #121619;
+}
+header {
+  padding: 4em;
+  background-color: #ffffff;
+}
+header h1 {
+  border-bottom: solid 1px #276820;
+  font-family: "angie-sans";
+  font-size: 4.5em;
+  font-feature-settings: "palt" 1;
+  text-align: center;
+}
+header h1::first-letter {
+  font-size: 1.2em;
+  letter-spacing: -0.05em;
+  color: #276820;
+}
+footer {
+  padding: 2em 5em;
+}
+footer p {
+  border-top: solid 1px #276820;
+  text-align: center;
+}
+main {
+  padding: 0 2em;
+}
