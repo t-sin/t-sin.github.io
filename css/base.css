@@ -21,8 +21,11 @@ header h1::first-letter {
   color: #276820;
 }
 header blockquote {
-  border-left: solid 6px #dde2e6;
+  margin: 10px;
   padding-left: 1em;
+  color: #526472;
+  font-size: 0.75em;
+  border-left: solid 5px #dde2e6;
 }
 footer {
   padding: 1em 2em;
@@ -42,6 +45,10 @@ main section {
   header h1 {
     font-size: 4.5em;
   }
+  header blockquote {
+    margin: 0 auto;
+    max-width: 400px;
+  }
   footer {
     padding: 2em 5em 1em;
   }
@@ -51,6 +58,10 @@ main section {
   }
 }
 @media screen and (min-width: 64em) {
+  header blockquote {
+    margin: 0 auto;
+    max-width: 600px;
+  }
   main section {
     width: 750px;
     margin: 0 auto;
