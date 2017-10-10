@@ -34,6 +34,7 @@ footer p {
   text-align: center;
 }
 main section {
+  clear: both;
   padding: 1em 1em;
   font-size: 0.9em;
 }
@@ -59,6 +60,15 @@ main section p {
 }
 main section p::before {
   content: "　";
+}
+main section dl dt {
+  float: left;
+  clear: left;
+  width: 5em;
+}
+main section dl dd {
+  float: left;
+  margin: 0;
 }
 @media screen and (min-width: 48em) {
   header {
