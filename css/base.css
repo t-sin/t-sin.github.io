@@ -20,6 +20,10 @@ header h1::first-letter {
   font-size: 1.2em;
   color: #276820;
 }
+header blockquote {
+  border-left: solid 6px #dde2e6;
+  padding-left: 1em;
+}
 footer {
   padding: 1em 2em;
 }
