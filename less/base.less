@@ -51,7 +51,27 @@ footer {
 }
 
 main section {
-    padding: 1em 2em;
+    padding: 1em 1em;
+    font-size: 0.9em;
+
+    h2 {
+        position: relative;
+        padding-left: 0.6em;
+
+        background-color: @bg2;
+        border-radius: 5px;
+        font-size: 1.7em;
+    }
+    h2::after {
+        position: absolute;
+        top: 0.25em;
+        left: 0.2em;
+        width: 0.2em;
+        height: 1em;
+        content: '';
+        background-color: @acent2;
+        border-radius: 3px;
+    }
 }
 
 @media screen and (min-width: 48em) {
@@ -88,6 +108,9 @@ main section {
         }
     }
     main {
+        h2 {
+            font-size: 2em;
+        }
         section {
             width: 750px;
             margin: 0 auto;
