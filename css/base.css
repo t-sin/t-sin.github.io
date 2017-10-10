@@ -54,6 +54,12 @@ main section h2::after {
   background-color: #db504a;
   border-radius: 3px;
 }
+main section p {
+  margin: 0;
+}
+main section p::before {
+  content: "　";
+}
 @media screen and (min-width: 48em) {
   header {
     padding: 5em 5em 3em;
