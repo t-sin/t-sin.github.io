@@ -50,7 +50,6 @@ footer p {
   text-align: center;
 }
 main section {
-  clear: both;
   padding: 1em 1em;
   font-size: 0.9em;
 }
@@ -85,6 +84,11 @@ main section dl dt {
 main section dl dd {
   float: left;
   margin: 0;
+}
+main section dl::after {
+  display: block;
+  clear: left;
+  content: '';
 }
 main section .works dt {
   float: left;
