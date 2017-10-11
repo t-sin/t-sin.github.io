@@ -15,6 +15,23 @@ body {
     color: @text;
 }
 
+a:link {
+    color: @accent2;
+    text-decoration: underline;
+}
+a:active {
+    color: @accent2;
+    text-decoration: underline;
+}
+a:visited {
+    color: @accent2;
+    text-decoration: underline;
+}
+a:hover {
+    color: lighten(@accent2, 20%);
+    text-decoration: none;
+}
+
 header {
     padding: 2em;
     background-color: @bg2;

@@ -5,6 +5,22 @@ body {
   background-color: #f0f7f4;
   color: #121619;
 }
+a:link {
+  color: #db504a;
+  text-decoration: underline;
+}
+a:active {
+  color: #db504a;
+  text-decoration: underline;
+}
+a:visited {
+  color: #db504a;
+  text-decoration: underline;
+}
+a:hover {
+  color: #eca29f;
+  text-decoration: none;
+}
 header {
   padding: 2em;
   background-color: #ffffff;
