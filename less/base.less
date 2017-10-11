@@ -109,6 +109,41 @@ main section {
             margin: 0;
         }
     }
+
+    .works {
+        dt {
+            float: left;
+            width: auto;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        dd {
+            float: none;
+            margin: 0 0.5em;
+        }
+        .works-repos, .works-lang {
+            float: left;
+        }
+        .works-repos {
+            svg {
+                display: inline;
+                margin-top: 2px;
+            }
+        }
+        .works-lang {
+            margin: 0;
+            padding: 2px 4px;
+            color: @bg;
+            font-size: 0.9em;
+            background-color: lighten(@text, 30%);
+            border-radius: 5px;
+        }
+        .works-desc {
+            clear: left;
+            margin-bottom: 2em;
+            margin-left: 1em;
+        }
+    }
 }
 
 @media screen and (min-width: 48em) {
