@@ -113,39 +113,69 @@ main section {
         clear: left;
         content: '';
     }
+}
 
-    .works {
-        dt {
-            float: left;
-            width: auto;
-            font-size: 1.2em;
-            font-weight: 500;
+.works {
+    dt {
+        float: left;
+        width: auto;
+        font-size: 1.2em;
+        font-weight: 500;
+    }
+    dd {
+        float: none;
+        margin: 0 0.5em;
+    }
+    .works-repos, .works-lang {
+        float: left;
+    }
+    .works-repos {
+        svg {
+            display: inline;
+            margin-top: 2px;
         }
-        dd {
-            float: none;
-            margin: 0 0.5em;
+    }
+    .works-lang {
+        margin: 0;
+        padding: 2px 4px;
+        background-color: fadeout(@text, 90%);
+        color: fadeout(@text, 30%);
+        font-size: 0.9em;
+        border-radius: 5px;
+    }
+    .works-desc {
+        clear: left;
+        margin-bottom: 2em;
+        margin-left: 1em;
+    }
+}
+
+.posts {
+    padding: 0;
+    list-style-type: none;
+
+    .posts-title {
+        margin: 1em 0 0;
+        font-weight: 400;
+    }
+    .posts-time {
+        color: fadeout(@text, 40%);
+    }
+    .posts-tag-cloud {
+        display: inline;
+        list-style-type: none;
+
+        ul {
+            display: inline;
+            padding: 0;
         }
-        .works-repos, .works-lang {
-            float: left;
-        }
-        .works-repos {
-            svg {
-                display: inline;
-                margin-top: 2px;
-            }
-        }
-        .works-lang {
-            margin: 0;
-            padding: 2px 4px;
-            color: @bg;
-            font-size: 0.9em;
-            background-color: lighten(@text, 30%);
+        li {
+            display: inline;
+            padding: 1px 3px;
             border-radius: 5px;
-        }
-        .works-desc {
-            clear: left;
-            margin-bottom: 2em;
-            margin-left: 1em;
+            background-color: fadeout(@text, 90%);
+            color: fadeout(@text, 30%);
+            font-size: 0.8em;
         }
     }
 }
@@ -193,4 +223,3 @@ main section {
         }
     }
 }
-
