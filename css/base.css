@@ -85,7 +85,7 @@ main section p::before {
 main section dl dt {
   float: left;
   clear: left;
-  width: 5em;
+  width: 10em;
 }
 main section dl dd {
   float: left;
