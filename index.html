@@ -16,165 +16,80 @@
       <global-header></global-header>
 
       <main>
-        <aboutme-section></aboutme-section>
-        <works-section></works-section>
-        <posts-section></posts-section>
+        <section>
+          <h2>TANAKA Shinichi</h2>
+          <p>GNU EmacsとSKKとCommon Lispでたたかうプログラマ。<a href="https://photos.app.goo.gl/6j5fh5tJ5ptkkQph9">リスエバンジェリスト🐿</a>。</p>
+          <p>PythonとCommon LispとJavaScriptが書けます。Nimもそこそこ書けます。<br>
+            主にバックエンドプログラムの経験が多いですが、フロントエンド開発はReact/Reduxのプロジェクトの改修とかなら経験あります。</p>
+          <p>とくに興味があるのは、サウンド処理プログラミングや言語処理系の実装などです。</p>
+        </section>
+        <section>
+          <h2>Works</h2>
+          <dl>
+            <dt>Inquisitor (<a href="https://github.com/t-sin/inquisitor">GitHub</a>)</dt>
+            <dd>Common Lisp</dd>
+            <dd>detects character encoding scheme and wraps external format.</dd>
+
+            <dt>ros-tap (<a href="https://github.com/t-sin/ros-tap">GitHub</a>)</dt>
+            <dd>Common Lisp</dd>
+            <dd>Manage local projects initially loaded with <a href="https://github.com/roswell/roswell">Roswell</a> the Common Lisp implementation manager.</dd>
+
+            <dt>LLGPL.ja (<a href="https://github.com/t-sin/LLGPL.ja">GitHub</a>)</dt>
+            <dd>Markdown</dd>
+            <dd>a Japanese translation of Lisp GNU General Public License (LLGPL). original LLGPL is created by <a href=\"http://opensource.franz.com/\">Franz Inc.</a></dd>
+
+            <dt>LISC (<a href="https://github.com/t-sin/lisc">GitHub</a>)</dt>
+            <dd>Python</dd>
+            <dd>a Lisp implemented as a Python's list comprehension.</dd>
+
+            <dt>Niko (<a href="https://github.com/t-sin/niko">GitHub</a>)</dt>
+            <dd>Common Lisp</dd>
+            <dd>Niko is a Slack bot; Niko tells you are mentioned on GitHub💡</dd>
+
+            <dt>Pukunui (<a href="https://github.com/t-sin/pukunui">GitHub</a>)</dt>
+            <dd>Common Lisp</dd>
+            <dd>Sound experiments; it goals pluggable units (oscillator, effecter and sequencers) and interactive sound generation.</dd>
+          </dl>
+
+          <h2>Trifle works</h2>
+          <dl>
+            <dt>One (<a href="https://github.com/t-sin/one">GitHub</a>)</dt>
+            <dd>Common Lisp</dd>
+            <dd>provides framework to process file/standard input. It helps writing one-liner with Common Lisp.</dd>
+
+            <dt>Rosa (<a href="https://github.com/t-sin/rosa">GitHub</a>)</dt>
+            <dd>Common Lisp</dd>
+            <dd>a language for text tagging, like a ID3 tag for MP3.</dd>
+
+            <dt>Nuts Lisp (<a href="https://github.com/t-sin/nutslisp">GitHub</a>)</dt>
+            <dd>Nim</dd>
+            <dd>a trivial Lisp-2 implementation written with <a href=\"https://nim-lang.org/\">Nim</a>.</dd>
+
+            <dt>Asha (<a href="https://github.com/t-sin/asha">GitHub</a>)</dt>
+            <dd>Common Lisp</dd>
+            <dd>WIP: Static site generator. It has a <a href="https://raw.githubusercontent.com/t-sin/asha/master/asha.gif">nice logo</a></dd>
+          </dl>
+       </section>
+        <section>
+          <h2>SNS and others</h2>
+          <dl>
+            <dt>blog</dt>
+            <dd><a href="http://octahedron.hatenablog.jp">http://octahedron.hatenablog.jp</a></dd>
+            <dt>GitHub</dt>
+            <dd><a href="https://github.com/t-sin/">https://github.com/t-sin/</a></dd>
+            <dt>Slideshare</dt>
+            <dd><a href="https://www.slideshare.net/t-sin">https://www.slideshare.net/t-sin/</a></dd>
+            <dt>Qiita</dt>
+            <dd><a href="https://qiita.com/t-sin/">https://qiita.com/t-sin/</a></dd>
+            <dt>SoundCloud</dt>
+            <dd><a href="https://soundcloud.com/sin_clav/">https://soundcloud.com/sin_clav/</a></dd>
+            <dt>email</dt>
+            <dd>shinichi.tanaka45@gmail.com</dd>
+          </dl>
+        </section>
       </main>
 
       <global-footer></global-footer>
     </div>
-    <script src="https://jp.vuejs.org/js/vue.js"></script>
-    <script>
-     Vue.component('global-header', {
-         template: '<header>' +
-                   '  <h1>Octahedronic</h1>' +
-                   '  <blockquote>' +
-                   '    <p>“But as long as you know that, you’re already free. As long as you’re ready to face the possibility that everything that makes your spirits soar, everything that lifts you up and fills your heart with joy, <em>everything that makes your life worth living</em> … is a lie, is corruption, is meaningless — then you can never be enslaved.”</p>' +
-                   '    — <cite>Greg Egan, <a href="http://www.gregegan.net/OCEANIC/Oceanic.html">Oceanic</a></cite>' +
-                   '  </blockquote>' +
-                   '</header>'
-     })
-     Vue.component('aboutme-section', {
-         template: '<section>' +
-                   '  <h2>TANAKA Shinichi</h2>' +
-                   '  <div>' +
-                   '    <p>GNU EmacsとSKKとCommon Lispでたたかうプログラマ。</p>' +
-                   '    <p>そしてLisp界の<a href="https://photos.app.goo.gl/6j5fh5tJ5ptkkQph9">リスエバンジェリスト🐿</a>。</p>' +
-                   '    <p>好きなジャンルはSF、好きな作家はダグラス・アダムズと円城塔とグレッグ・イーガン、好きなバンドはMy Bloody Valentine、好きな文字はカナダ先住民文字です。</p>' +
-                   '    <hr>' +
-                   '    <p>PythonとCommon LispとJavaScriptが書けます。Nimもそこそこ書けます。<br>' +
-                   '       主にバックエンドプログラムの経験が多く、フロントエンド開発はReact/Reduxのプロジェクトの改修とかなら経験あります。</p>' +
-                   '    <p>興味があるのは、サウンド処理プログラミングや言語処理系の実装などです。</p>' + 
-                   '  </div>' +
-                   '  <dl>' +
-                   '    <dt>GitHub</dt>' +
-                   '    <dd><a href="https://github.com/t-sin/">https://github.com/t-sin/</a></dd>' +
-                   '    <dt>Slideshare</dt>' +
-                   '    <dd><a href="https://www.slideshare.net/t-sin">https://www.slideshare.net/t-sin/</a></dd>' +
-                   '    <dt>Qiita</dt>' +
-                   '    <dd><a href="https://qiita.com/t-sin/">https://qiita.com/t-sin/</a></dd>' +
-                   '    <dt>SoundCloud</dt>' +
-                   '    <dd><a href="https://soundcloud.com/sin_clav/">https://soundcloud.com/sin_clav/</a></dd>' +
-                   '    <dt>email</dt>' +
-                   '    <dd>shinichi.tanaka45@gmail.com</dd>' +
-                   '  </dl>' +
-                   '</section>'
-     })
-     Vue.component('global-footer', {
-         template: '<footer>' +
-                   '  <p>2017, Octahedronic</p>' +
-                   '</footer>'
-     })
-     Vue.component('posts-item', {
-         props: ['post'],
-         template: '<li>' +
-                   '  <h3 class="posts-title"><a v-bind:href="post.url">{{ post.title }}</a></h3>' +
-                   '  <time class="posts-time">{{ post.date }}</time>' +
-                   '  <nav class="posts-tag-cloud">' +
-                   '    <ul>' +
-                   '      <li v-for="tag in post.tags">{{ tag }}</li>' +
-                   '    </ul>' +
-                   '  </nav>' +
-                   '</li>'
-     })
-     Vue.component('works-item', {
-         props: ['work'],
-         template: '<div>' +
-                   '  <dt>{{ work.title }}</dt>' +
-                   '  <dd class="works-repos"><a v-bind:href="work.url"><svg aria-hidden="true" class="octicon octicon-mark-github" height="1.5em" version="1.1" viewBox="0 0 16 16" width="1.5em"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a></dd>' +
-                   '  <dd class="works-lang" v-for="ln in work.lang">{{ ln }}</dd>' +
-                   '  <dd class="works-desc" v-html="work.description"></dd>' +
-                   '</div>'
-     })
-     Vue.component('works-section', {
-         data: function () {
-             return {
-                 works: [
-                     {
-                         title: "Inquisitor",
-                         url: "https://github.com/t-sin/inquisitor",
-                         lang: ["Common Lisp"],
-                         description: "detects character encoding scheme and wraps external format."
-                     },
-                     {
-                         title: "One",
-                         url: "https://github.com/t-sin/one",
-                         lang: ["Common Lisp"],
-                         description: "provides framework to process file/standard input. It helps writing one-liner with Common Lisp."
-                     },
-                     {
-                         title: "Rosa",
-                         url: "https://github.com/t-sin/rosa",
-                         lang: ["Common Lisp"],
-                         description: "a language for text tagging, like a ID3 tag for MP3."
-                     },
-                     {
-                         title: "LLGPL.ja",
-                         url: "https://github.com/t-sin/LLGPL.ja",
-                         lang: ["Markdown"],
-                         description: "a Japanese translation of Lisp GNU General Public License (LLGPL). original LLGPL is created by <a href=\"http://opensource.franz.com/\">Franz Inc.</a>"
-                     },
-                     {
-                         title: "Nuts Lisp",
-                         url: "https://github.com/t-sin/nutslisp",
-                         lang: ["Nim"],
-                         description: "a trivial Lisp-2 implementation written with <a href=\"https://nim-lang.org/\">Nim</a>. You can try this on <a href=\"https://t-sin.github.io/nutslisp\">this page</a>."
-                     },
-                     {
-                         title: "LISC",
-                         url: "https://github.com/t-sin/lisc",
-                         lang: ["Python"],
-                         description: "a Lisp implemented as a Python's list comprehension."
-                     },
-                     {
-                         title: "Niko",
-                         url: "https://github.com/t-sin/niko",
-                         lang: ["Common Lisp"],
-                         description: "Niko is a Slack bot; Niko tells you are mentioned on GitHub💡"
-                     }
-                 ]
-             }
-         },
-         template: '<section>' +
-                   '  <h2>Works</h2>' +
-                   '  <dl class="works">' +
-                   '    <works-item v-for="work in works" :key="work.url"' +
-                   '                v-bind:work="work"></works-item>' +
-                   '  </dl>' +
-                   '</section>'
-     })
-     Vue.component('posts-section', {
-         data: function() {
-             return {
-                 posts: [
-                     {
-                         title: "Oji --- バイト列の文字境界を識別する",
-                         url: "http://octahedron.hatenablog.jp/entry/2017/09/26/123715",
-                         date: "2017-09-26",
-                         tags: ["Common Lisp", "LISP"]
-                     },
-                     {
-                         title: "Lisp GNU Lesser General Public Licenseを和訳してみた",
-                         url: "http://octahedron.hatenablog.jp/entry/2017/09/11/113114",
-                         date: "2017-09-11",
-                         tags: ["Common Lisp", "LISP"]
-                     }
-                 ]
-             }
-         },
-         template: '<section>' +
-                   '  <h2>Posts</h2>' +
-                   '  <ul class="posts">' +
-                   '    <posts-item v-for="post in posts" :key="post.url"' +
-                   '                v-bind:post="post">' +
-                   '    </posts-item>' +
-                   '  </ul>' +
-                   '</section>'
-     })
-     var app = new Vue({
-         el: "#app",
-         data: {}
-     })
-    </script>
   </body>
 </html>
