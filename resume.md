@@ -26,6 +26,7 @@
 
 #### 特記事項
 
+- 自社製チャットボットサービスの管理画面開発
 - GNU/Linuxによるコンテナクラスタ
 - Circle CIによる継続的インテグレーション
 - 言語はJavaScript, TypeScript, Ruby等
