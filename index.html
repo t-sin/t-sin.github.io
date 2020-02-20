@@ -7,14 +7,43 @@
 
     <script src="https://use.typekit.net/sno5gih.js"></script>
     <script>try{Typekit.load({ async: true });}catch(e){}</script>
-    <link rel="stylesheet" href="/css/pure-min.css">
-    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+
+    <style>
+      body {
+        margin: auto;
+        padding: 5em 10% 0;
+      }
+      .work {
+        box-sizing: border-box;
+        padding: 0.5rem;
+        height: 15rem;
+      }
+      .work h3 {
+        margin: 0;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+      .work .lang {
+        padding: 0 3px;
+        font-size: 0.8rem;
+        color: #777;
+        border: solid 1px #999;
+        border-radius: 5px;
+      }
+      .work p {
+        margin: 0.5rem;
+      }
+      table td, th{
+        padding: 0.2rem 0.5rem;
+      }
+    </style>
 
   </head>
   <body>
     <div id="app">
       <global-header>
-        <h2>TANAKA Shinichi</h2>
+        <h1>Shinichi Tanaka</h1>
       </global-header>
 
       <main>
@@ -29,80 +58,140 @@
         </section>
         <section>
           <h2>Works</h2>
-          <dl>
-            <dt>Inquisitor (<a href="https://github.com/t-sin/inquisitor">GitHub</a>)</dt>
-            <dd>Common Lisp</dd>
-            <dd>detects character encoding scheme and wraps external format.</dd>
 
-            <dt>ros-tap (<a href="https://github.com/t-sin/ros-tap">GitHub</a>)</dt>
-            <dd>Common Lisp</dd>
-            <dd>Manage local projects initially loaded with <a href="https://github.com/roswell/roswell">Roswell</a> the Common Lisp implementation manager.</dd>
+          <div class="pure-g">
+            <article class="work pure-u-1-4">
+              <h3>Inquisitor (<a href="https://github.com/t-sin/inquisitor">GitHub</a>)</h3>
+              <span class="lang">Common Lisp</span>
+              <p>
+                detects character encoding scheme and wraps external format.
+              </p>
+            </article>
 
-            <dt>LLGPL.ja (<a href="https://github.com/t-sin/LLGPL.ja">GitHub</a>)</dt>
-            <dd>Markdown</dd>
-            <dd>a Japanese translation of Lisp GNU General Public License (LLGPL). original LLGPL is created by <a href=\"http://opensource.franz.com/\">Franz Inc.</a></dd>
+            <article class="work pure-u-1-4">
+            <h3>ros-tap (<a href="https://github.com/t-sin/ros-tap">GitHub</a>)</h3>
+            <span class="lang">Common Lisp</span>
+            <p>
+              Manage local projects initially loaded with <a href="https://github.com/roswell/roswell">Roswell</a> the Common Lisp implementation manager.
+            </p>
+            </article>
 
-            <dt>LISC (<a href="https://github.com/t-sin/lisc">GitHub</a>)</dt>
-            <dd>Python</dd>
-            <dd>a Lisp implemented as a Python's list comprehension.</dd>
+            <article class="work pure-u-1-4">
+            <h3>LLGPL.ja (<a href="https://github.com/t-sin/LLGPL.ja">GitHub</a>)</h3>
+            <span class="lang">Markdown</span>
+            <p>
+              a Japanese translation of Lisp GNU General Public License (LLGPL).
+              original LLGPL is created by <a href=\"http://opensource.franz.com/\">Franz Inc.</a>
+            </p>
+            </article>
 
-            <dt>Niko (<a href="https://github.com/t-sin/niko">GitHub</a>)</dt>
-            <dd>Common Lisp</dd>
-            <dd>Niko is a Slack bot; Niko tells you are mentioned on GitHub💡</dd>
+            <article class="work pure-u-1-4">
+            <h3>LISC (<a href="https://github.com/t-sin/lisc">GitHub</a>)</h3>
+            <span class="lang">Python</span>
+            <p>
+              a Lisp implemented as a Python's list comprehension.
+            </p>
+            </article>
 
-            <dt>Pukunui (<a href="https://github.com/t-sin/pukunui">GitHub</a>)</dt>
-            <dd>Common Lisp</dd>
-            <dd>Sound experiments; it goals pluggable units (oscillator, effecter and sequencers) and interactive sound generation.</dd>
+            <article class="work pure-u-1-4">
+            <h3>Niko (<a href="https://github.com/t-sin/niko">GitHub</a>)</h3>
+            <span class="lang">Common Lisp</span>
+            <p>
+              Niko is a Slack bot; Niko tells you are mentioned on GitHub💡
+            </p>
+            </article>
 
-            <dt>Koto (<a href="https://github.com/t-sin/koto">GitHub</a>)</dt>
-            <dd>Rust</dd>
-            <dd>
+            <article class="work pure-u-1-4">
+            <h3>Pukunui (<a href="https://github.com/t-sin/pukunui">GitHub</a>)</h3>
+            <span class="lang">Common Lisp</span>
+            <p>
+              Sound experiments; it goals pluggable units (oscillator, effecter and sequencers) and interactive sound generation.
+            </p>
+            </article>
+
+            <article class="work pure-u-1-4">
+            <h3>Koto (<a href="https://github.com/t-sin/koto">GitHub</a>)</h3>
+            <span class="lang">Rust</span>
+            <p>
               Music performing filesystem; synthesizer modules can be manupilated via FUSE filesystem.
               <a href="https://t-sin.github.io/koto/">Here is a special site!</a>
-            </dd>
-          </dl>
+            </p>
+            </article>
 
-          <h2>Trifle works</h2>
-          <dl>
-            <dt>One (<a href="https://github.com/t-sin/one">GitHub</a>)</dt>
-            <dd>Common Lisp</dd>
-            <dd>provides framework to process file/standard input. It helps writing one-liner with Common Lisp.</dd>
+            <article class="work pure-u-1-4">
+            <h3>One (<a href="https://github.com/t-sin/one">GitHub</a>)</h3>
+            <span class="lang">Common Lisp</span>
+            <p>
+              provides framework to process file/standard input. It helps writing one-liner with Common Lisp.
+            </p>
+            </article>
 
-            <dt>Rosa (<a href="https://github.com/t-sin/rosa">GitHub</a>)</dt>
-            <dd>Common Lisp</dd>
-            <dd>a language for text tagging, like a ID3 tag for MP3.</dd>
+            <article class="work pure-u-1-4">
+            <h3>Rosa (<a href="https://github.com/t-sin/rosa">GitHub</a>)</h3>
+            <span class="lang">Common Lisp</span>
+            <p>
+              a language for text tagging, like a ID3 tag for MP3.
+            </p>
+            </article>
 
-            <dt>Nuts Lisp (<a href="https://github.com/t-sin/nutslisp">GitHub</a>)</dt>
-            <dd>Nim</dd>
-            <dd>a trivial Lisp-2 implementation written with <a href=\"https://nim-lang.org/\">Nim</a>.</dd>
+            <article class="work pure-u-1-4">
+            <h3>Nuts Lisp (<a href="https://github.com/t-sin/nutslisp">GitHub</a>)</h3>
+            <span class="lang">Nim</span>
+            <p>
+              a trivial Lisp-2 implementation written with <a href=\"https://nim-lang.org/\">Nim</a>.
+            </p>
+            </article>
 
-            <dt>Asha (<a href="https://github.com/t-sin/asha">GitHub</a>)</dt>
-            <dd>Common Lisp</dd>
-            <dd>WIP: Static site generator. It has a <a href="https://raw.githubusercontent.com/t-sin/asha/master/asha.gif">nice logo</a></dd>
+            <article class="work pure-u-1-4">
+            <h3>Asha (<a href="https://github.com/t-sin/asha">GitHub</a>)</h3>
+            <span class="lang">Common Lisp</span>
+            <p>
+              WIP: Static site generator. It has a <a href="https://raw.githubusercontent.com/t-sin/asha/master/asha.gif">nice logo</a>
+            </p>
+            </article>
 
-            <dt>Altair (<a href="https://github.com/t-sin/altair">GitHub</a>)</dt>
-            <dd>Nim</dd>
-            <dd>A programmable synthesizer. Its behavior is programmed as a PostScript-like program.</dd>
-          </dl>
+            <article class="work pure-u-1-4">
+            <h3>Altair (<a href="https://github.com/t-sin/altair">GitHub</a>)</h3>
+            <span class="lang">Nim</span>
+            <p>
+              A programmable synthesizer. Its behavior is programmed as a PostScript-like program.
+            </p>>
+            </article>
+          <div>
        </section>
-        <section>
+
+       <section>
           <h2>SNS and others</h2>
-          <dl>
-            <dt>blog</dt>
-            <dd><a href="http://octahedron.hatenablog.jp">http://octahedron.hatenablog.jp</a></dd>
-            <dt>GitHub</dt>
-            <dd><a href="https://github.com/t-sin/">https://github.com/t-sin/</a></dd>
-            <dt>Slideshare</dt>
-            <dd><a href="https://www.slideshare.net/t-sin">https://www.slideshare.net/t-sin/</a></dd>
-            <dt>Qiita</dt>
-            <dd><a href="https://qiita.com/t-sin/">https://qiita.com/t-sin/</a></dd>
-            <dt>SoundCloud</dt>
-            <dd><a href="https://soundcloud.com/sin_clav/">https://soundcloud.com/sin_clav/</a></dd>
-            <dt>Shadertoy</dt>
-            <dd><a href="https://www.shadertoy.com/user/sinclav">https://www.shadertoy.com/user/sinclav</a></dd>
-            <dt>email</dt>
-            <dd>shinichi.tanaka45@gmail.com</dd>
-          </dl>
+          <table>
+            <tr>
+              <th>blog</th>
+              <td><a href="http://octahedron.hatenablog.jp">http://octahedron.hatenablog.jp</a></td>
+            </tr>
+            <tr>
+              <th>GitHub</th>
+              <td><a href="https://github.com/t-sin/">https://github.com/t-sin/</a></td>
+            </tr>
+            <tr>
+              <th>Slideshare</th>
+              <td><a href="https://www.slideshare.net/t-sin">https://www.slideshare.net/t-sin/</a></td>
+            </tr>
+            <tr>
+              <th>Qiita</th>
+              <td><a href="https://qiita.com/t-sin/">https://qiita.com/t-sin/</a></td>
+            </tr>
+            <tr>
+              <th>SoundCloud</th>
+              <td><a href="https://soundcloud.com/sin_clav/">https://soundcloud.com/sin_clav/</a></td>
+            </tr>
+            <tr>
+              <th>Shadertoy</th>
+              <td><a href="https://www.shadertoy.com/user/sinclav">https://www.shadertoy.com/user/sinclav</a></td>
+            </tr>
+            <tr>
+              <th>email</th>
+              <td>shinichi.tanaka45@gmail.com</td>
+            </tr>
+          </table>
         </section>
       </main>
 
