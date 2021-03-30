@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>{% block title %}{% endblock %} - {{ website-title }}</title>
+    <link href="assets/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/index.html" class="website-title">{{ website-title }}</span>
+        <span class="website-author">by {{ website-author }}</span>
+      </h1>
+      <hr />
+      <nav>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="works.html">Works</a></li>
+          <li><a href="about.html">Blog1 (technical)</a></li>
+          <li><a href="about.html">Blog2 (other)</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="content">
+      {% block content %}{% endblock %}
+    </div>
+
+
+    <footer>
+      <hr>
+      <p><a href="">Source code of this site</a></p>
+    </footer>
+  </body>
+</html>
