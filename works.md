@@ -10,7 +10,7 @@
 - [進捗アドベントカレンダー2020](https://github.com/t-sin/shinchoku-advent-calendar-2020)
     - ちゃんと外部に話していないことを書いてみるアドベントカレンダー。
 
-## Reposiories
+## software projects
 
 - [Inquisitor](https://github.com/t-sin/inquisitor) (Common Lisp)
     - 文字コード・改行コードの判定と、Common Lispのextrenal-formatの処理系依存な抽象化を行うライブラリ。
@@ -48,3 +48,12 @@
     - こちらに[製作過程的なもの](http://octahedron.hatenablog.jp/entry/2020/03/06/085854)を記しています。
 - [Mark](https://github.com/t-sin/mark) (C)
     - Lispでリスを実装するプロジェクト。
+
+## music
+
+### discography
+
+- [First Commit](https://sushihamburg.bandcamp.com/album/first-commit) (「ハンバーグめっちゃ旨え」名義)
+    - [@carrotflakes](https://github.com/carrotflakes)さんとのユニットの初アルバム。エレクトロニカ。
+- [Roudou](https://sushihamburg.bandcamp.com/album/roudou)  (「ハンバーグめっちゃ旨え」名義)
+    - [@carrotflakes](https://github.com/carrotflakes)さんとのユニットの2つめのアルバム。「労働」がテーマ。
