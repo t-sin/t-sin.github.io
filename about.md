@@ -1,3 +1,10 @@
+:title About
+:created-at 2021-03-31T18:00:00+09:00
+:updated-at
+:description 自己紹介のページ
+
+:content
+
 # About
 
 ## me
