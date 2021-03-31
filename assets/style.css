@@ -30,6 +30,7 @@ header h1 span.website-author {
 }
 
 header hr {
+  margin: 0;
   border-style: solid none none none;
   border-width: 1px;
   border-color: rgba(255, 255, 255, 0.4);
@@ -73,6 +74,10 @@ footer hr {
 
 /* content */
 
+div#page-info {
+  font-size: 0.75em;
+}
+
 div#content {
   padding: 20px 40px;
   max-width: 1000px;
@@ -100,4 +105,11 @@ a:hover {
 
 ul {
   padding-left: 40px;
+}
+
+hr {
+  margin: 4em 0 2em;
+  border-style: solid none none none;
+  border-width: 1px;
+  border-color: #888888;
 }

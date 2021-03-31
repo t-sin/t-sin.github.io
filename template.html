@@ -22,8 +22,14 @@
 
     <div id="content">
       {% block content %}{% endblock %}
-    </div>
 
+      <div id="page-info">
+        <hr>
+        <p>{{ description }}</p>
+        作成日時: {{ created-at }}<br>
+        更新日時: {{ updated-at }}
+      </div>
+    </div>
 
     <footer>
       <hr>
