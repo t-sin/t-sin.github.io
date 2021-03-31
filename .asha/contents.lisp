@@ -1,5 +1,5 @@
 
-(#S(CONTENT :NAME "works" :TEMPLATE-NAME "markdown-template" :PATHSTR "works.md")
- #S(CONTENT :NAME "about" :TEMPLATE-NAME "markdown-template" :PATHSTR "about.md")
- #S(CONTENT :NAME "index" :TEMPLATE-NAME "markdown-template" :PATHSTR "index.html")
- #S(CONTENT :NAME "style" :TEMPLATE-NAME NIL :PATHSTR "assets/style.css")) 
+(#S(CONTENT :NAME "works" :TEMPLATE-NAME "markdown-template" :CREATED-AT "2021-03-31T18:00:00+09:00" :UPDATED-AT "" :PATHSTR "works.md")
+ #S(CONTENT :NAME "about" :TEMPLATE-NAME "markdown-template" :CREATED-AT "2021-03-31T18:00:00+09:00" :UPDATED-AT "" :PATHSTR "about.md")
+ #S(CONTENT :NAME "index" :TEMPLATE-NAME "markdown-template" :CREATED-AT "2021-03-30T21:00:00+09:00" :UPDATED-AT "" :PATHSTR "index.html")
+ #S(CONTENT :NAME "style" :TEMPLATE-NAME NIL :CREATED-AT "2021-03-30T21:00:00+09:00" :UPDATED-AT "" :PATHSTR "assets/style.css")) 
