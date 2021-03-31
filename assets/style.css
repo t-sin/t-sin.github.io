@@ -75,6 +75,7 @@ footer hr {
 
 div#content {
   padding: 20px 40px;
+  max-width: 1000px;
 }
 
 h2 {
