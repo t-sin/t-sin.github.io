@@ -1,27 +1,7 @@
-<html>
-  <head>
-    <title>index - Ibotenic</title>
-    <link href="assets/style.css" rel="stylesheet">
-  </head>
-  <body>
-    <header>
-      <h1>
-        <a href="/" class="website-title">Ibotenic</span>
-        <span class="website-author">by t-sin</span>
-      </h1>
-      <hr />
-      <nav>
-        <ul>
-          <li><a href="about.html">About</a></li>
-          <li><a href="works.html">Works</a></li>
-          <li><a href="about.html">Blog1 (technical)</a></li>
-          <li><a href="about.html">Blog2 (other)</a></li>
-        </ul>
-      </nav>
-    </header>
+{% extends "template.html" %}
+{% block title %}index{% endblock %}
 
-    <div id="content">
-      
+{% block content %}
 <section>
   <a href="https://github.com/lem-project/lem">Lem</a>とSKKとCommon Lispでたたかうプログラマのブログとか紹介とかのウェブページです。
 </section>
@@ -55,19 +35,4 @@
   あいうえおあいうえお。あいうえおあいうえお。あいうえおあいうえお。あいうえおあいうえお。あいうえおあいうえお。<br>
   あいうえおあいうえお。あいうえおあいうえお。あいうえおあいうえお。あいうえおあいうえお。あいうえおあいうえお。<br>
 </section>
-
-
-      <div id="page-info">
-        <hr>
-        <p></p>
-        作成日時: <br>
-        更新日時: 
-      </div>
-    </div>
-
-    <footer>
-      <hr>
-      <p><a href="https://github.com/t-sin/t-sin.github.io">Here is the source code of this site.</a></p>
-    </footer>
-  </body>
-</html>
+{% endblock %}
