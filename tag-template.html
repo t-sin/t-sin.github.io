@@ -3,12 +3,17 @@
 
 {% block content %}
 <h2>{{ tag }}</h2>
-<ul id="tagged">
-  {% for article in article-info-list %}
+<ul id="article-list">
+  {% for article-info in article-info-list %}
   <li>
-    <h2><a href="./{{ article.link }}">{{ article.title }}</a></h2>
-    <p class="date">{{ article.created-at }}</p>
-    <p class="description">{{ article.description }}</p>
+    <h2><a href="./{{ article-info.link }}">{{ article-info.title }}</a></h2>
+    <p class="tags">
+      {% for tag in article-info.tags %}
+      <span><a href="{{ tag }}.html">{{ tag }}</a></span>
+      {% endfor %}
+    </p>
+    <p class="date">{{ article-info.created-at }}</p>
+    <p class="description">{{ article-info.description }}</p>
   </li>
   {% endfor %}
 </ul>
