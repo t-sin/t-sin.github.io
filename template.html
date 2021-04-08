@@ -25,10 +25,18 @@
       {% block content %}{% endblock %}
 
       <div id="page-info">
-        <hr>
         <p>{{ description }}</p>
-        作成日時: {{ created-at }}<br>
-        更新日時: {{ updated-at }}
+        {% if tag-info-list %}
+        <p>
+          タグ:
+          {% for tag in tag-info-list %}
+          <a href="{{ tag.link }}">{{ tag.name }}</a>
+          {% if not forloop.last %},{% else %}{% endif %}
+          {% endfor %}
+        </p>
+        {% endif %}
+        {% if created-at %}<p>作成日時: {{ created-at }}</p>{% else %}{% endif %}
+        {% if updated-at %}<p>更新日時: {{ updated-at }}</p>{% else %}{% endif %}
       </div>
     </div>
 
