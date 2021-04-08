@@ -2,7 +2,7 @@
 #S(ARTICLE-SET
    :NAME "blog"
    :TITLE "技術なこと"
-   :TEMPLATE-NAME "markdown-template"
+   :TEMPLATE-NAME "article-template"
    :TAG-TEMPLATE-NAME "tag-template"
    :INDEX-TEMPLATE-NAME "index-template"
    :ARTICLES (#S(CONTENT
