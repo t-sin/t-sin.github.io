@@ -2,7 +2,7 @@
 {% block title %}{{ article-set }} &gt tags &gt {{ tag }}{% endblock %}
 
 {% block content %}
-<h2>{{ tag }}</h2>
+<h1>タグ: {{ tag }}</h1>
 <ul id="article-list">
   {% for article-info in article-info-list %}
   <li>

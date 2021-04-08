@@ -3,11 +3,11 @@
 
 {% block content %}
 
-<h2>{{ article-set-title }}</h2>
+<h1>{{ article-set-title }}</h1>
 
 主にプログラミングについて書くブログです。たまに電子工作の話題があるかもしれない。
 
-<h3>最新20件の記事</h3>
+<h2>最新20件の記事</h2>
 
 <ul id="article-list">
   {% for article-info in article-info-list %}
@@ -24,7 +24,7 @@
   {% endfor %}
 </ul>
 
-<h3>タグ一覧</h3>
+<h2>タグ一覧</h2>
 
 <p class="tags">
   {% for tag in tags %}
