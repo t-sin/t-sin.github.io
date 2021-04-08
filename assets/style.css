@@ -117,23 +117,37 @@ hr {
   border-color: #888888;
 }
 
-ul#tagged {
+p.tags span {
+  margin: 10px 0;
+  padding: 0 2px;
+  font-size: 0.8em;
+  background-color: #ffffff;
+  color: #3e3e3e;
+  border: solid 1px #708e75;;
+  border-radius: 3px;
+}
+
+p.tags span a {
+  text-decoration: none;
+}
+
+ul#article-list {
   padding-left: 20px;
   list-style-type: none;
   font-size: 1em;
 }
 
-ul#tagged h2 {
+ul#article-list h2,h3,h4 {
   margin: 1em 0 0px;
-  font-size: 1.5em;
+  font-size: 1.25em;
 }
 
-ul#tagged .date {
-  font-size: 0.7em;
+ul#article-list .date {
+  font-size: 0.8em;
   color: #888888;
 }
 
-ul#tagged .description {
+ul#article-list .description {
   font-size: 1em;
 }
 
