@@ -20,11 +20,22 @@ header {
   font-size: 1.2em;
 }
 
-header h1 span.website-title {
+header h1 a:hover {
+  text-decoration: none;
   font-weight: 200;
 }
 
-header h1 span.website-author {
+header h1 .website-title {
+  font-size: 1.25em;
+  font-weight: 200;
+}
+
+header h1 .website-by {
+  font-size: 0.5em;
+  font-weight: 200;
+}
+
+header h1 .website-author {
   font-weight: 200;
   font-size: 0.7em;
   color: #dddddd;
