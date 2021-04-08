@@ -39,6 +39,8 @@
         {% if created-at %}<p>作成日時: {{ created-at }}</p>{% else %}{% endif %}
         {% if updated-at %}<p>更新日時: {{ updated-at }}</p>{% else %}{% endif %}
       </div>
+
+      {% block navigator %}{% endblock %}
     </div>
 
     <footer>
