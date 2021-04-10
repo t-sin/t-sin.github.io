@@ -7,15 +7,15 @@
 </section>
 
 <section>
-  <h2>Blog1への投稿 最新10件</h2>
+  <h2>技術ブログへの投稿 最新10件</h2>
   <ul id="article-list">
-    {% for article-info in article-set-info-list.blog.article-info %}
+    {% for article-info in article-set-info-list.techblog.article-info %}
     {% if forloop.counter <= 10 %}
     <li>
-      <h3><a href="/blog/{{ article-info.link }}">{{ article-info.title }}</a></h3>
+      <h3><a href="/techblog/{{ article-info.link }}">{{ article-info.title }}</a></h3>
       <p class="tags">
         {% for tag in article-info.tags %}
-        <span><a href="/blog/{{ tag }}.html">{{ tag }}</a></span>
+        <span><a href="/techblog/{{ tag }}.html">{{ tag }}</a></span>
         {% endfor %}
       </p>
       <p class="date">{{ article-info.created-at }}</p>

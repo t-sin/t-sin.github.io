@@ -25,5 +25,5 @@
     :TEMPLATE-NAME NIL
     :CREATED-AT "2021-04-04T22:02:33.532297+09:00"
     :UPDATED-AT ""
-    :PATHSTR "assets/style.css"
+    :PATHSTR "style.css"
     :TAGS NIL)) 
