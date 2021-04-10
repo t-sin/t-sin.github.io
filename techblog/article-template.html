@@ -1,7 +1,25 @@
 {% extends "../template.html" %}
 {% block title %}{{ title }} - {{ article-set-title }}{% endblock %}
+{% block head %}
+<link href="/techblog/style.css" rel="stylesheet">
+{% endblock %}
 
-{% block content %}{{ content|safe }}{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+<div class="article-info">
+  <p>
+    {% for tag in tag-info-list %}
+    <a class="tag" href="{{ tag.link }}">{{ tag.name }}</a>
+    {% endfor %}
+  </p>
+  <p class="created-at">{{ created-at }}</p>
+  <p class="description">{{ description }}</p>
+</div>
+
+<article>
+  {{ content|safe }}
+</article>
+{% endblock %}
 
 {% block navigator %}
 <nav>
