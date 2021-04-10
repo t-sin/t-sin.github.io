@@ -7,10 +7,10 @@
 </section>
 
 <section>
-  <h2>Blog1への投稿 最新20件</h2>
+  <h2>Blog1への投稿 最新10件</h2>
   <ul id="article-list">
     {% for article-info in article-set-info-list.blog.article-info %}
-    {% if forloop.counter <= 1 %}
+    {% if forloop.counter <= 10 %}
     <li>
       <h3><a href="/blog/{{ article-info.link }}">{{ article-info.title }}</a></h3>
       <p class="tags">
@@ -26,7 +26,4 @@
   </ul>
 </section>
 
-<section>
-  <h2>Blog1への投稿 最新20件</h2>
-</section>
 {% endblock %}
