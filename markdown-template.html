@@ -1,4 +1,7 @@
 {% extends "template.html" %}
 {% block title %}{{ title }}{% endblock %}
+{% block head %}
+<link href="/markdown.css" rel="stylesheet">
+{% endblock %}
 
 {% block content %}{{ content|safe }}{% endblock %}
