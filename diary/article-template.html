@@ -1,0 +1,45 @@
+{% extends "../template.html" %}
+{% block title %}{{ title }} - {{ article-set-title }}{% endblock %}
+{% block head %}
+<link href="/markdown.css" rel="stylesheet">
+<link href="/techblog/style.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<div class="article-info">
+  <p>
+    {% for tag in tag-info-list %}
+    <a class="tag" href="{{ tag.link }}">{{ tag.name }}</a>
+    {% endfor %}
+  </p>
+  <p class="created-at">{{ created-at }}</p>
+  <p class="description">{{ description }}</p>
+</div>
+
+<article>
+  {{ content|safe }}
+</article>
+{% endblock %}
+
+{% block navigator %}
+<nav>
+  <div class="article-nav nav-left">
+    <p class="nav-label">1つ新しい記事</p>
+    {% if next-article %}
+    <a href="{{ next-article.name }}.html">{{ next-article.title }}</a>
+    {% else %}
+    -
+    {% endif %}
+  </div>
+
+  <div class="article-nav nav-right">
+    <p class="nav-label">1つ古い記事</p>
+    {% if prev-article %}
+    <a href="{{ prev-article.name }}.html">{{ prev-article.title }}</a>
+    {% else %}
+    -
+    {% endif %}
+  </div>
+</nav>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "../template.html" %}
+{% block title %}{{ article-set-title }} &gt tags &gt {{ tag }}{% endblock %}
+
+{% block content %}
+<h1>タグ: {{ tag }}</h1>
+<ul id="article-list">
+  {% for article-info in article-info-list %}
+  <li>
+    <h2><a href="./{{ article-info.link }}">{{ article-info.title }}</a></h2>
+    <p class="tags">
+      {% for tag in article-info.tags %}
+      <span><a href="{{ tag }}.html">{{ tag }}</a></span>
+      {% endfor %}
+    </p>
+    <p class="date">{{ article-info.created-at }}</p>
+    <p class="description">{{ article-info.description }}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
