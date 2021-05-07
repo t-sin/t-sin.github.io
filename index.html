@@ -32,10 +32,10 @@
     {% for article-info in article-set-info-list.diary.article-info %}
     {% if forloop.counter <= 10 %}
     <li>
-      <h3><a href="/techblog/{{ article-info.link }}">{{ article-info.title }}</a></h3>
+      <h3><a href="/diary/{{ article-info.link }}">{{ article-info.title }}</a></h3>
       <p class="tags">
         {% for tag in article-info.tags %}
-        <span><a href="/techblog/{{ tag }}.html">{{ tag }}</a></span>
+        <span><a href="/diary/{{ tag }}.html">{{ tag }}</a></span>
         {% endfor %}
       </p>
       <p class="date">{{ article-info.created-at }}</p>
