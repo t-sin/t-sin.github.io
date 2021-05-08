@@ -31,4 +31,5 @@ PythonやGo, Rust, Common LispとJavaScriptが書けます。
 - Qiita: [@t-sin](https://qiita.com/t-sin/)
 - SoundCloud: [@sin_clav](https://soundcloud.com/sin_clav/)
 - Shadertoy: [@sinclav](https://www.shadertoy.com/user/sinclav)
+- Wishlist: [here](https://www.amazon.jp/hz/wishlist/ls/4RJ9BZGEYLGT?ref_=wl_share)
 - E-mail: shinichi.tanaka45@gmail.com
