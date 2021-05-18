@@ -6,6 +6,13 @@
    :TAG-TEMPLATE-NAME "techblog.tag-template"
    :INDEX-TEMPLATE-NAME "techblog.index-template"
    :ARTICLES (#S(ASHA:CONTENT
+                 :NAME "2021-05-19_invader-game"
+                 :TEMPLATE-NAME NIL
+                 :CREATED-AT "2021-05-19T00:30:35.402697+09:00"
+                 :UPDATED-AT ""
+                 :PATHSTR "techblog/2021-05-19_invader-game.md"
+                 :TAGS ("プログラミング" "ゲーム" "円城塔" "自作"))
+              #S(ASHA:CONTENT
                  :NAME "2021-04-10_static-site-generator"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2021-04-10T22:45:03.392272+09:00"
