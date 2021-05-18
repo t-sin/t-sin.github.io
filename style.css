@@ -123,6 +123,10 @@ ul {
   padding-left: 40px;
 }
 
+ol {
+  padding-left: 40px;
+}
+
 hr {
   margin: 4em 0 2em;
   border-style: solid none none none;
