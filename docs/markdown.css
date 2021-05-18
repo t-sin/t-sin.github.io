@@ -8,6 +8,11 @@ article ul {
 /*  text-indent: 1em; */
 }
 
+article ol {
+  margin: 1em 0 1em;
+/*  text-indent: 1em; */
+}
+
 article code {
   margin: 0 2px;
   padding: 2px 4px;
