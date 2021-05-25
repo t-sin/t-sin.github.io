@@ -51,6 +51,11 @@
     - プログラム可能なシンセサイザー。Nimのv1.0.0がでたのでつくってみた。
     - こちらに[製作過程的なもの](http://octahedron.hatenablog.jp/entry/2020/03/06/085854)を記しています。
 
+### ゲーム系
+
+- [天書](https://github.com/t-sin/tensho) (JavaScript)
+    - 円城塔『文字渦』のパロディ。
+
 ### 実験系
 
 - [LISC](https://github.com/t-sin/lisc) (Python)
