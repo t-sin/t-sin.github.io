@@ -10,6 +10,15 @@
 - [『3つのLisp 3つの世界 (Three Lisp in Three Weeks)』](https://paren-holic.booth.pm/items/1317263), 共著, 技術書典6
 - [『Lispとコンピュータ音楽 Vol.1 (Lisp and Computer Music)』](https://paren-holic.booth.pm/items/1575612), 単著, 技術書典7
 
+## music
+
+### discography
+
+- [First Commit](https://sushihamburg.bandcamp.com/album/first-commit) (「ハンバーグめっちゃ旨え」名義)
+    - [@carrotflakes](https://github.com/carrotflakes)さんとのユニットの初アルバム。エレクトロニカ。
+- [Roudou](https://sushihamburg.bandcamp.com/album/roudou)  (「ハンバーグめっちゃ旨え」名義)
+    - [@carrotflakes](https://github.com/carrotflakes)さんとのユニットの2つめのアルバム。「労働」がテーマ。
+
 ## events
 
 - [進捗アドベントカレンダー2020](https://github.com/t-sin/shinchoku-advent-calendar-2020)
@@ -72,12 +81,3 @@
     - 初めてつくったLisp処理系。頓挫とかした。
 - [Mark](https://github.com/t-sin/mark) (C)
     - Lispでリスを実装するプロジェクト。
-
-## music
-
-### discography
-
-- [First Commit](https://sushihamburg.bandcamp.com/album/first-commit) (「ハンバーグめっちゃ旨え」名義)
-    - [@carrotflakes](https://github.com/carrotflakes)さんとのユニットの初アルバム。エレクトロニカ。
-- [Roudou](https://sushihamburg.bandcamp.com/album/roudou)  (「ハンバーグめっちゃ旨え」名義)
-    - [@carrotflakes](https://github.com/carrotflakes)さんとのユニットの2つめのアルバム。「労働」がテーマ。
