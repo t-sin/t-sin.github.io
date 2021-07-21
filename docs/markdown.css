@@ -38,3 +38,10 @@ article pre code {
   border-radius: 0;
   background-color: transparent;
 }
+
+article blockquote {
+  margin: 0.5em 0;
+  padding: 0.5em 0;
+  padding-left: 1em;
+  border-left: solid 7px #ebf3e1;
+}
