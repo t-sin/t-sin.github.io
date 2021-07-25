@@ -21,28 +21,28 @@
     :PATHSTR "techblog/style.css"
     :TAGS NIL)
  #S(ASHA.WEBSITE:CONTENT
-    :NAME "works"
+    :NAME "works.md"
     :TEMPLATE-NAME "markdown-template"
     :CREATED-AT "2021-04-04T22:02:52.780479+09:00"
     :UPDATED-AT ""
     :PATHSTR "works.md"
     :TAGS NIL)
  #S(ASHA.WEBSITE:CONTENT
-    :NAME "about"
+    :NAME "about.md"
     :TEMPLATE-NAME "markdown-template"
     :CREATED-AT "2021-04-04T22:02:45.564890+09:00"
     :UPDATED-AT ""
     :PATHSTR "about.md"
     :TAGS NIL)
  #S(ASHA.WEBSITE:CONTENT
-    :NAME "index"
+    :NAME "index.html"
     :TEMPLATE-NAME "template"
     :CREATED-AT "2021-04-04T22:02:37.868485+09:00"
     :UPDATED-AT ""
     :PATHSTR "index.html"
     :TAGS NIL)
  #S(ASHA.WEBSITE:CONTENT
-    :NAME "style"
+    :NAME "style.css"
     :TEMPLATE-NAME NIL
     :CREATED-AT "2021-04-04T22:02:33.532297+09:00"
     :UPDATED-AT ""
