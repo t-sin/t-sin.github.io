@@ -25,11 +25,12 @@ PythonやGo, Rust, Common LispとJavaScriptが書けます。
 
 ## SNS and others
 
-- blog (old): [Octahedronic](http://octahedron.hatenablog.jp)
+- 旧ブログ: [Octahedronic](http://octahedron.hatenablog.jp)
 - GitHub: [@t-sin](https://github.com/t-sin/)
 - Slideshare: [@t-sin](https://www.slideshare.net/t-sin/)
 - Qiita: [@t-sin](https://qiita.com/t-sin/)
-- SoundCloud: [@sin_clav](https://soundcloud.com/sin_clav/)
-- Shadertoy: [@sinclav](https://www.shadertoy.com/user/sinclav)
+- SoundCloud (音楽) : [@sin_clav](https://soundcloud.com/sin_clav/)
+- YouTube (音楽動画、シンセ演奏動画): [t sin](https://www.youtube.com/channel/UCwLQi_G98Jqn2VU6nsKFuyg)
+- Shadertoy (シェーダ作品) : [@sinclav](https://www.shadertoy.com/user/sinclav)
 - Wishlist: [here](https://www.amazon.jp/hz/wishlist/ls/4RJ9BZGEYLGT?ref_=wl_share)
 - E-mail: shinichi.tanaka45@gmail.com

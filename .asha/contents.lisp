@@ -31,7 +31,7 @@
     :NAME "about.md"
     :TEMPLATE-NAME "markdown-template"
     :CREATED-AT "2021-04-04T22:02:45.564890+09:00"
-    :UPDATED-AT ""
+    :UPDATED-AT "2021-09-06T12:15:44.652604+09:00"
     :PATHSTR "about.md"
     :TAGS NIL)
  #S(ASHA.WEBSITE:CONTENT
