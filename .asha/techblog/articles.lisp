@@ -6,6 +6,13 @@
    :TAG-TEMPLATE-NAME "techblog.tag-template"
    :INDEX-TEMPLATE-NAME "techblog.index-template"
    :ARTICLES (#S(ASHA.WEBSITE:CONTENT
+                 :NAME "2021-09-10-c-lesson-02"
+                 :TEMPLATE-NAME NIL
+                 :CREATED-AT "2021-09-10T10:16:31.467047+09:00"
+                 :UPDATED-AT ""
+                 :PATHSTR "techblog/2021-09-10-c-lesson-02.md"
+                 :TAGS ("プログラミング" "C言語" "言語処理系"))
+              #S(ASHA.WEBSITE:CONTENT
                  :NAME "2021-07-21-c-lesson-01"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2021-07-21T01:10:41.653094+09:00"
