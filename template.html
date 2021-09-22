@@ -1,9 +1,16 @@
 <html>
-  <head>
+  <head prefix="og: http://ogp.me/ns#">
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %} - {{ website-title }}</title>
     <link href="/style.css" rel="stylesheet">
-    {% block head %}{% endblock %}
+
+    {% block head %}
+    <meta name="og:url" content="https://t-sin.github.io/">
+    <meta name="og:title" content="Ibotenic">
+    <!--meta name="og:image" content="https://www.itra.co.jp/uploads/media/2019/05/20190528171315_1.jpg"-->
+    <meta name="og:description" content="LemとSKKとCommon Lispでたたかうプログラマのブログとか紹介とかのウェブページです。">
+    <meta name="og:type" content="article">
+    {% endblock %}
   </head>
   <body>
     <header>
