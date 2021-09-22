@@ -1,0 +1,169 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>われわれが必要なすべてはLOVE - 技術の記録 - Ibotenic</title>
+    <link href="/style.css" rel="stylesheet">
+    
+<link href="/markdown.css" rel="stylesheet">
+<link href="/techblog/style.css" rel="stylesheet">
+
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/" class="website-title">Ibotenic</span>
+        <span class="website-by">by</span>
+        <span class="website-author">t-sin</span>
+      </h1>
+      <hr />
+      <nav>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/works.html">Works</a></li>
+          <li><a href="/techblog/">Tech Blog</a></li>
+          <li><a href="/diary/">Diary</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="content">
+      
+<h1>われわれが必要なすべてはLOVE</h1>
+<div class="article-info">
+  <p>
+    
+    <a class="tag" href="プログラミング.html">プログラミング</a>
+    
+    <a class="tag" href="Lua.html">Lua</a>
+    
+    <a class="tag" href="ゲーム.html">ゲーム</a>
+    
+    <a class="tag" href="ゲームエンジン.html">ゲームエンジン</a>
+    
+    <a class="tag" href="自作.html">自作</a>
+    
+  </p>
+  <p class="created-at">2021-05-28T09:43:26.014764+09:00</p>
+  <p class="description">
+LOVEというLuaで書けるゲームエンジンの紹介です。
+</p>
+</div>
+
+<article>
+  <h2>愛をみつけてしまった</h2>
+<p>近ごろ、かわいいゲームエンジンを見つけてしまってLuaにハマっています。そのゲームエンジンはLÖVEという名前のエンジンで、なぜかわいいのかは公式ウェブサイトを見るとわかります。</p>
+<p><a href="https://love2d.org">LÖVE - Free 2D Game Engine</a></p>
+<p>ポップでかわいらしいデザインのウェブサイトで、その見た目にノックアウトされて触ってみるとかなり高速でいい感じです。特徴を上げておくと</p>
+<ul>
+<li>2Dゲーム用のエンジン</li>
+<li>クロスプラットフォーム
+<ul>
+<li>iOSやAndriodアプリも出力できるようです</li>
+</ul>
+</li>
+<li>ゲームの記述言語はLua (with <a href="https://luajit.org">LuaJIT</a>)
+<ul>
+<li>エンジン自体はほぼすべてC++で書かれている</li>
+</ul>
+</li>
+<li>グラフィックやIO、サウンドまわりの抽象化
+<ul>
+<li>剛体力学シミュレーション込み</li>
+</ul>
+</li>
+<li>ゲームのメカニズム (状態遷移とか) は入ってない</li>
+</ul>
+<p>という感じです。SDLの上につくられており、薄いゲームエンジンといった風情のようです。</p>
+<h2>コードはどんな感じ？</h2>
+<p><a href="https://github.com/t-sin/love-sketches/blob/master/2021-05-25-noise-circles/noise-circles.png">こんな感じのパーリンノイズ可視化</a>が以下のように書けます。</p>
+<pre><code class="language-lua">function love.load()
+    z = 0
+end
+
+function love.update()
+    z = z + 0.01
+end
+
+function love.draw()
+    love.graphics.clear(0.08, 0.03, 0.084)
+    love.graphics.setBlendMode(&quot;add&quot;)
+    love.graphics.setColor(0.4, 0.5, 0.8, 1)
+    for y = 0, love.graphics.getPixelHeight(), 30 do
+        for x = 0, love.graphics.getPixelWidth(), 30 do
+            n = love.math.noise(x / 100 , y / 100, z)
+            r = n * n * 30 + 1
+            love.graphics.circle(&quot;line&quot;, x, y, r)
+        end
+    end
+end
+</code></pre>
+<p>ここでは<code>love</code>モジュールが提供するコールバック関数を3つオーバーライドしています。なんとなく想像がつくと思いますが、<code>love.load()</code>は起動したとき1回だけ実行され主に状態初期化やリソース読み込みなどに理想します。<code>love.update()</code>は状態の更新を行うためのものです。<code>love.draw()</code>は状態を利用して画面に描画するためのコールバック関数です。</p>
+<p>ところでこの可視化のプログラム、以前<a href="https://github.com/t-sin/my-generative-art-sketches/blob/master/perlin-circles.lisp">ジェネラティブアートとして書いたもの</a>の焼き直しなのです。</p>
+<p>そう、そうなんです。</p>
+<p>ゲームエンジンってジェネラティブアートにも向いてるんですね（学び）。</p>
+<p>ちなみに同じことを<a href="http://quil.info">Quil</a> (ProcessingのClojureラッパーライブラリ) でやるとけっこうもたつくのですが、LOVEなら60fpsでぬるぬる動きます。ProcessingやQuilではアニメーション関連はオブジェクト数が多くなると重くなってくるのであまり気軽には試せなかったんですが、これならほんとうに気軽にアニメーションできてよいです。好き。Common Lispにこのレベルのライブラリがほしくなってしまいます。</p>
+<h2>lua-modeがほしい…</h2>
+<p>ちなみにふだん使いのテキストエディタは<a href="https://github.com/lem-project/lem">Common Lisp製のLem</a>なのですが、これにはまだlua-modeが存在しないので、fundamental-modeでコードを書いています。つらい。せめてシンタックスハイライトとオートインデントがほしい。</p>
+<p>なので、どこかでlua-modeを書いてpull requestをださねばならない。</p>
+<h2>今後どうするの？</h2>
+<p>これだけ気軽にできるなら、ということでスケッチを溜めていくためのリポジトリをつくりました。</p>
+<p><a href="https://github.com/t-sin/love-sketches">t-sin/love-sketches</a></p>
+<p>いまは簡易クリックゲーム的なものをつくろうとして四苦八苦しています。これ以降も、ジェネラティブアートっぽいことや、ゲーーム的なものなどをスケッチしていろいろ試してみようと思います。</p>
+
+</article>
+
+
+      <div id="page-info">
+        <p>
+LOVEというLuaで書けるゲームエンジンの紹介です。
+</p>
+        
+        <p>
+          タグ:
+          
+          <a href="プログラミング.html">プログラミング</a>
+          ,
+          
+          <a href="Lua.html">Lua</a>
+          ,
+          
+          <a href="ゲーム.html">ゲーム</a>
+          ,
+          
+          <a href="ゲームエンジン.html">ゲームエンジン</a>
+          ,
+          
+          <a href="自作.html">自作</a>
+          
+          
+        </p>
+        
+        <p>作成日時: 2021-05-28T09:43:26.014764+09:00</p>
+        <p>更新日時: -</p>
+      </div>
+
+      
+<nav>
+  <div class="article-nav nav-left">
+    <p class="nav-label">1つ新しい記事</p>
+    
+    <a href="2021-05-19_invader-game.html">文字文字スペースインベーダー</a>
+    
+  </div>
+
+  <div class="article-nav nav-right">
+    <p class="nav-label">1つ古い記事</p>
+    
+    <a href="2021-06-15-minecraft-server.html">Minecraftサーバを立てたい</a>
+    
+  </div>
+</nav>
+
+    </div>
+
+    <footer>
+      <hr>
+      <p><a href="https://github.com/t-sin/t-sin.github.io">Here is the source code of this site.</a></p>
+    </footer>
+  </body>
+</html>
