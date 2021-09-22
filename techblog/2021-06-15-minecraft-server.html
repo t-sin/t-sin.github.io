@@ -1,0 +1,199 @@
+<html>
+  <head prefix="og: http://ogp.me/ns#">
+    <meta charset="UTF-8">
+    <title>Minecraftサーバを立てたい - 技術の記録 - Ibotenic</title>
+    <link href="/style.css" rel="stylesheet">
+
+    
+<link href="/markdown.css" rel="stylesheet">
+<link href="/techblog/style.css" rel="stylesheet">
+
+<meta name="og:url" content="https://t-sin.github.io/">
+<meta name="og:title" content="Ibotenic - diary - Minecraftサーバを立てたい">
+<!--meta name="og:image" content="https://www.itra.co.jp/uploads/media/2019/05/20190528171315_1.jpg"-->
+<meta name="og:description" content="
+Minecraftサーバを立てたかった話です。
+">
+<meta name="og:type" content="article">
+
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/" class="website-title">Ibotenic</span>
+        <span class="website-by">by</span>
+        <span class="website-author">t-sin</span>
+      </h1>
+      <hr />
+      <nav>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/works.html">Works</a></li>
+          <li><a href="/techblog/">Tech Blog</a></li>
+          <li><a href="/diary/">Diary</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="content">
+      
+<h1>Minecraftサーバを立てたい</h1>
+<div class="article-info">
+  <p>
+    
+    <a class="tag" href="ゲーム.html">ゲーム</a>
+    
+    <a class="tag" href="Minecraft.html">Minecraft</a>
+    
+    <a class="tag" href="IaaS.html">IaaS</a>
+    
+    <a class="tag" href="クラウド.html">クラウド</a>
+    
+  </p>
+  <p class="created-at">2021-06-15T19:00:02.251230+09:00</p>
+  <p class="description">
+Minecraftサーバを立てたかった話です。
+</p>
+</div>
+
+<article>
+  <h2>マインクラフトはじめました</h2>
+<p>6月3日からはじめた<a href="https://www.minecraft.net/ja-jp">マインクラフト</a>ですが、みごとにハマっています。どれくらいハマっているかというと、</p>
+<ul>
+<li><a href="https://twitter.com/search?q=from%3Asin_clav%20%E3%83%9E%E3%82%A4%E3%82%AF%E3%83%A9&f=live">twitterがマイクラで埋まる</a></li>
+<li><a href="https://twitter.com/sin_clav/media">twitterのメディア欄がだいぶマイクラに</a></li>
+<li>マイクラ中のお菓子が捗る</li>
+<li>土日もマイクラ</li>
+<li>プログラミング的進捗が消滅</li>
+<li>読書進捗も消滅</li>
+</ul>
+<p>…と、まあどハマりですね。</p>
+<p>マインクラフトのサバイバルモードでは、探索要素があり、開拓要素があり、農耕・牧畜要素があり、料理要素があり、とオープンワールドなゲームみたいに遊びがいがありおもしろいです。マイクラをしていると、『ゼルダの伝説 ブレス・オブ・ザ・ワイルド』や『天穂のサクナヒメ』をやってたときにも感じた、「人間って開拓すきじゃね…？ 遺伝子に刻まれた性向なのか…？」という思いがまた感じられました。</p>
+<p>木材を集めるのがダルすぎて友人に教えてもらった木の伐採modをいれたり、ミニマップのmodをいれたり、挙句の果てには描画がきれいになるmodをいれたりして、大いに楽しんでいます。</p>
+<h2>サーバを立てたい</h2>
+<p>そうして楽しんでいるわけなのですが、マイクラではどうもサーバをてると同じワールドに複数人で入って遊べるらしいのです。いわゆるマルチプレイというやつです。なにそれやりたい。</p>
+<p>マイクラサーバを立てて友人とマイクラ遊びたい！</p>
+<p>そんなわけでいろいろ調べはじめました。</p>
+<h3>マインクラフトのエディション</h3>
+<p>まず、マインクラフトのゲームにはエディションというものがあるようでした。現行のエディションは、</p>
+<ol>
+<li>Javaエディション</li>
+<li>Bedrockエディション</li>
+</ol>
+<p>の2種類があるようです。1は昔からあるJavaで実装されたエディションで、個人でサーバを立て (てmodを入れ) たりできるのはこちらのエディションのようです。ぼくのマシンで常用しているOSはUbuntuなので、マイクラのクライアントアプリもJavaエディションです。2は、Javaエディションだとスマホやゲーム機で動かせないからなのか、Javaが動かない環境でもマイクラを移植できるように作られたエディションのようです。</p>
+<p>公式のアップデートはどちらのエディションにも同時に提供されるので (直近だと6月9日に&quot;Caves and Cliffs&quot;という大型アップデートがありましたね) 、PCでどちらを選ぶかはどのように遊びたいかによって決めるとよさそうです。すなわち、</p>
+<ul>
+<li>modを入れたい</li>
+<li>modを入れた状態でワールドを共有したい
+<ul>
+<li>このためにサーバを自分で立てる必要がある</li>
+</ul>
+</li>
+</ul>
+<p>ときにはJavaエディションを、そうでないときはBedrockエディションを選べばよいというわけです。GNU/LinuxだとBedrockは選択肢外ですが。</p>
+<h3>modについて</h3>
+<p>Javaエディションでは、Javaのクラスローダをごにょごにょしてあるため、かつmod用のAPIが提供されているために、modを作成して読み込ませることができます。modによって、木の根本を斧で破壊するだけで木全体が破壊されるというユーティリティ的な変更から、ゲームの見た目をカスタムする、ゲームに新しいモードを追加するということまでができるようになっています。</p>
+<p>modはJavaのjarファイルの形で提供され、所定の場所に置けば起動時に読み込まれるしくみです。ただ、素のmod用APIは低レベルなのか、それらをうまくラップして抽象化レイヤーを提供してくれるmodフレームワークが存在しており、わりといろんなmodがそれに依存していました。ぼくが利用している範囲だと、伐採modのCutAllや描画をカスタムするOptiFineは、Forgeというmodフレームワークに依存してた気がします。</p>
+<h3>サーバの立て方</h3>
+<p>マイクラのJavaエディションでは、サーバのプログラムもJavaのjarファイルとして提供されています。なのでもっともシンプルには、以下の手順で起動できるはずです:</p>
+<ol>
+<li>Javaの実行環境をインストールする</li>
+<li><a href="https://www.minecraft.net/ja-jp/download/server">ここ</a>からサーバのjarファイルをダウンロードする</li>
+<li><code>java</code>コマンドでサーバを起動する</li>
+</ol>
+<p>もしサーバにアクセスしてマルチプレイをするときにもmodを有効にしたい場合、サーバにmodを導入しておく必要があるようです。</p>
+<p>概要は以上のような感じです。</p>
+<h2>素のサーバを立てるチャレンジ</h2>
+<p>ここまでわかった時点で、まずは自分のマシン上にサーバを立てる実験をしてみました。ちなみに<strong>これは失敗します</strong>。</p>
+<p>ぼくの環境はUbuntu 20.04 LTSなので<code>sudo snap install openjdk</code>でJVMをインストールし、サーバをダウンロードするページにあるように<code>java -Xmx1024M -Xms1024M -jar minecraft_server.1.17.jar nogui</code>でサーバを起動しようとしました。</p>
+<p>が、まずclassファイルのバージョンが新しくて実行できないと言われました。JDKの11ではだめなのか、と思って<code>sudo apt openjdk-16-jdk</code>しなおして起動しても、ソケットがつくれないといって落ちてしまいます。root権限が足りないのかと思って<code>sudo chmod 777 -R ./path/to/minecraft</code>するとサーバのjarファイルがないと言われて謎。jarファイルのownerがrootではないからが原因だったのでもういちど<code>sudo chown root:root -R ./path/to/minecraft</code>して実行してもソケットがつくれないエラー。なにもわからない。</p>
+<p>ちなみにサーバとクライアントのバージョンが合っていなければ起動できても接続ができないので (手元の家までつくったワールドは<code>1.16.5</code>)、じつはそもそもサーバのjarファイルのダウンロードの時点で失敗していたのでした。</p>
+<h2>Dockerでサーバを立てるチャレンジ</h2>
+<p>ハマりどころがいろいろ多くてしゃらくさいので、Dockerで立ててみることにしました。<a href="https://github.com/itzg/docker-minecraft-server">有志の手によってDockerイメージが公開</a>されているとのことだったので、以下のように<code>docker-compose.yml</code>を書いて、</p>
+<pre><code>version: &quot;3.8&quot;
+
+services:
+  mc:
+    image: itzg/minecraft-server:java8
+    ports:
+      - 25565:25565
+    environment:
+      EULA: &quot;TRUE&quot;
+      VERSION: 1.16.5
+      TYPE: FORGE
+      FORGEVERSION: 36.1.0
+    volumes:
+      - ./minecraft-data:/data
+</code></pre>
+<p>ディレクトリ<code>minecraft-data</code>も用意しておいて、mod等の準備もした上で<code>sudo docker-compose up</code>すると、立ち上がる立ち上がる！ しかも接続もでき、ワールドデータも手元のをそのまま持っていけました。</p>
+<p>ちょっと解説すると、このイメージでは<code>/data</code>にマインクラフトのデータを持ちます。<code>volumes</code>で外のディレクトリをマウントしてやると、既にあるデータを使ってサーバを起動できます。このイメージは起動時<code>/data</code>内に必要なディレクトリがなければ作成します。またForgeも自動でインストールしてくれます。なので、こちらでやることはmodのjarファイルを所定の場所 (Forgeのmodなら<code>/data/mods</code>) に置いておくだけです。もしワールドを引き継ぎたかったら、外から持ってきた<code>world</code>ディレクトリをそのまま<code>/data</code>に置けば、起動時に読み込まれます。</p>
+<p>イメージのタグとしてJava 8を利用するタグを指定していますが、どうもmodのほうがJava 8に依存していることがあるからのようです。実際指定なしにしたらmodの初期化で落ちて起動しませんでした。</p>
+<p>もし入れるユーザを指定したい場合は<code>environment</code>に<code>WHITELIST: user1,user2</code>を追加してやるといいです。<code>user1</code>などはマインクラフトのアカウント名です。</p>
+<h2>クラウドにサーバを立てるチャレンジ</h2>
+<p>さて、ここまででサーバ上でマイクラを走らせてログインするところまでできました。ただ、ローカルのサーバだと2つ問題がありました。</p>
+<ol>
+<li>スペックがあまり高くないIntel NUCでサーバを立てたため、処理落ちする</li>
+<li>友人にサーバを共有できない (LAN内なので)</li>
+</ol>
+<p>1は単に性能が足りていない問題ですが、クラウドではどうなるんでしょう。2は、自分でグローバルIPを取得してうんぬんとしてもいいのですがめんどくさいので、クラウドにサーバを立ててみる実験をしてみることにしました。</p>
+<p>GCPにアカウントをつくったりしたあと、GCEインスタンスのスペックを選びたいですがどのインスタンスタイプにしたらいいのかが謎でした。インスタンスタイプ選びの参考にこの記事<a href="https://qiita.com/rodotan/items/f5d7f76a1bc9b34ab717">GCP初心者がGCEでマイクラサーバを建ててみた話 - Qiita</a>を読んで<code>n1-standard-2</code>ならいけるかも、と思い、無料期間を利用してちょっと試してみました。</p>
+<p>まず<code>e2-standard-4</code>にしてみると (あ、n1じゃないこれ) 一人でサーバに入ってもハチさんがカクカクします。つぎに<code>e2-standard-8</code>にすると、一人のときはハチさんが滑らかでしたが二人入るとハチさんがカクカクします。がーん。ちなみに手元のNUC (Celeron 4スレッド, 2018年くらい購入) だとハチさんがカクカクしました。</p>
+<p>これけっこういいスペックでいいお値段だと思うんですよね、ウェブアプリ動かす分には。このあたりで怖くなったので一旦インスタンスを落としました。</p>
+<h2>まとめ</h2>
+<p>というわけで、クラウドだと<code>e2-standard-*</code>ではかなり上げないとだめそうでした。いったん普段遊びとしてはローカルで立てつつクラウドのほうも実験していきます。</p>
+<p>というかそうかぁ。<code>n2-standard-2</code>ならいけたのかもしれないなあ。常に利用したときお金がどうなるかちょっと予想できないので、どうしたものか。</p>
+
+</article>
+
+
+      <div id="page-info">
+        <p>
+Minecraftサーバを立てたかった話です。
+</p>
+        
+        <p>
+          タグ:
+          
+          <a href="ゲーム.html">ゲーム</a>
+          ,
+          
+          <a href="Minecraft.html">Minecraft</a>
+          ,
+          
+          <a href="IaaS.html">IaaS</a>
+          ,
+          
+          <a href="クラウド.html">クラウド</a>
+          
+          
+        </p>
+        
+        <p>作成日時: 2021-06-15T19:00:02.251230+09:00</p>
+        <p>更新日時: -</p>
+      </div>
+
+      
+<nav>
+  <div class="article-nav nav-left">
+    <p class="nav-label">1つ新しい記事</p>
+    
+    <a href="2021-05-28-game-engine-love.html">われわれが必要なすべてはLOVE</a>
+    
+  </div>
+
+  <div class="article-nav nav-right">
+    <p class="nav-label">1つ古い記事</p>
+    
+    <a href="2021-07-21-c-lesson-01.html">C言語の勉強: 簡易PostScriptインタプリタ編</a>
+    
+  </div>
+</nav>
+
+    </div>
+
+    <footer>
+      <hr>
+      <p><a href="https://github.com/t-sin/t-sin.github.io">Here is the source code of this site.</a></p>
+    </footer>
+  </body>
+</html>
