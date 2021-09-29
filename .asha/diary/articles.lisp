@@ -6,6 +6,13 @@
    :TAG-TEMPLATE-NAME "diary.tag-template"
    :INDEX-TEMPLATE-NAME "diary.index-template"
    :ARTICLES (#S(ASHA.WEBSITE:CONTENT
+                 :NAME "2021-09-29_baking_pot"
+                 :TEMPLATE-NAME NIL
+                 :CREATED-AT "2021-09-29T18:53:33.468422+09:00"
+                 :UPDATED-AT ""
+                 :PATHSTR "diary/2021-09-29_baking_pot.md"
+                 :TAGS ("料理" "レシピ"))
+              #S(ASHA.WEBSITE:CONTENT
                  :NAME "2021-08-10_not-healty"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2021-08-10T10:18:00.209778+09:00"
