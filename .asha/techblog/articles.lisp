@@ -6,6 +6,13 @@
    :TAG-TEMPLATE-NAME "techblog.tag-template"
    :INDEX-TEMPLATE-NAME "techblog.index-template"
    :ARTICLES (#S(ASHA.WEBSITE:CONTENT
+                 :NAME "2021-10-27_generative-art-synchronized-with-music"
+                 :TEMPLATE-NAME NIL
+                 :CREATED-AT "2021-10-27T20:37:48.918748+09:00"
+                 :UPDATED-AT ""
+                 :PATHSTR "techblog/2021-10-27_generative-art-synchronized-with-music.md"
+                 :TAGS ("プログラミング" "音楽" "ジェネラティブアート" "ゲームエンジン" "Lua"))
+              #S(ASHA.WEBSITE:CONTENT
                  :NAME "2021-09-10-c-lesson-02"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2021-09-10T10:16:31.467047+09:00"
