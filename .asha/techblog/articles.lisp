@@ -9,7 +9,7 @@
                  :NAME "2021-10-27_generative-art-synchronized-with-music"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2021-10-27T20:37:48.918748+09:00"
-                 :UPDATED-AT ""
+                 :UPDATED-AT "2021-10-30T22:40:55.396168+09:00"
                  :PATHSTR "techblog/2021-10-27_generative-art-synchronized-with-music.md"
                  :TAGS ("プログラミング" "音楽" "ジェネラティブアート" "ゲームエンジン" "Lua"))
               #S(ASHA.WEBSITE:CONTENT
