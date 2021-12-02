@@ -6,6 +6,14 @@
    :TAG-TEMPLATE-NAME "techblog.tag-template"
    :INDEX-TEMPLATE-NAME "techblog.index-template"
    :ARTICLES (#S(ASHA.WEBSITE:CONTENT
+                 :NAME "2021-12-02_tanaka-lisp-progress"
+                 :TEMPLATE-NAME NIL
+                 :CREATED-AT "2021-12-03T08:37:20.761478+09:00"
+                 :UPDATED-AT ""
+                 :PATHSTR "techblog/2021-12-02_tanaka-lisp-progress.md"
+                 :TAGS ("プログラミング" "言語処理系" "言語実装" "Lisp" "C言語"
+                        "Lispアドベントカレンダー"))
+              #S(ASHA.WEBSITE:CONTENT
                  :NAME "2021-10-27_generative-art-synchronized-with-music"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2021-10-27T20:37:48.918748+09:00"
