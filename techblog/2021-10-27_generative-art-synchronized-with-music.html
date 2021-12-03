@@ -89,7 +89,8 @@ LuaのゲームエンジンLoveをつかって、音とグラフィックのコ�
 <p>さて、この曲のマスタリングされたデータが<code>drop.mp3</code>です。これに合ったかたちでゲームループ内でイベント「波紋が発生」を起こさなければなりません。ただもちろん<code>drop.mp3</code>はPCMデータ、波形データなので各音が鳴るタイミングなんて入っていません。</p>
 <p>でもぼくはこの曲の作成者なので、DAW (作曲ソフト) の元データを持っています。元データにはメロディの情報が入っています。こいつをMIDIファイルに書き出す機能を利用して、出力したのがリポジトリの<code>drop.mid</code>です。この中から音が鳴る (ノートオン) する時間を単位は秒で取り出して、Luaから読めるように配列を含むLuaのコードとして出力するプログラムを書きます。MIDIファイルを読んでLuaコードを吐くだけなので言語はなんでもいいです。</p>
 <p>じゃあCommon Lispで！！！ やってみました！！！！！</p>
-<pre><code class="language-lisp">
+<pre><code class="language-lisp">;; (ql:quickload &quot;midi&quot;)
+
 (defun bpm (midi-tempo)
   (float (/ (* 60 1000 1000) midi-tempo)))
 

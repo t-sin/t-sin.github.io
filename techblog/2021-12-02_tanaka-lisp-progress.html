@@ -70,7 +70,9 @@
 <h2>tanaka-lispとは</h2>
 <p>まずは自作言語tanaka-lispの機能や目標を述べます。紆余曲折があったもののこの言語で何をするのかは<a href="https://github.com/t-sin/tanaka-lisp/commit/a7a612374ea4cea6ade2d9516a78df6d8d30eb25">11月5日に完全に確定</a>しました。ここでは完成したらどんな言語であるかを書きます。</p>
 <p>tanaka-lispはオブジェクト指向Lispです。Lispというと<a href="https://mitpress.mit.edu/sites/default/files/sicp/index.html">SICPの表紙</a>からイメージされるように<code>eval</code>と<code>apply</code>を基礎としてつくるイメージがあると思いますが、tanaka-lispはオブジェクト指向なので、メッセージの送信を基礎におきます。tanaka-lispでは以下のようなコードを実行できます。</p>
-<pre><code class="language-lisp">
+<pre><code class="language-lisp">;; https://github.com/t-sin/tanaka-lisp/blob/46a5346b51321ef4dfe8a9616e7cd665cebd5c60/examples/layer2/02-define-message.lisp
+;; message definition example
+
 (defmsg pulse (type float)
     (duty)
   (if (&gt; self duty)
@@ -78,10 +80,13 @@
       0.0))
 
 (pulse 0.0 0.5)
+; =&gt; 0.0
 
 (pulse 0.8 0.5)
+; =&gt; 1.0
 
 (pulse 1 1)
+; -&gt; unknown message (because `1` is integer)
 </code></pre>
 <p>やっているのは0.0 ~ 1.0の定義域で矩形波の値を返す関数の定義と、その利用です。見た目はただのS式のコードなのですが、一見してLispっぽくないといころは<code>defmsg</code>でしょうか。これは<code>defun</code>や<code>defn</code>に相当する、メッセージ定義のためのメッセージ送信式です。<code>pulse</code>というシンボルオブジェクトは<code>defmsg</code>を受け取ると、引数や本体部分をグローバルな辞書に登録します。「引数」や「本体」はリストオブジェクトをそのまま渡します。呼び出してるところでは、パース結果である<code>(pulse 0.8 0.5)</code>というリストオブジェクトに<code>eval</code>メッセージを送ると、先頭がシンボルオブジェクトならメッセージ辞書の対応する処理を呼ぶ感じです。</p>
 <p>ちなみにメッセージを受けるとき引数は評価されずにパース時のオブジェクトがそのまま渡ってくるので、評価するしないはメッセージのレシーバが決めます (つまり評価が本体評価時に遅延される)。すると、いわゆるLispの伝統的マクロのようなものも実現できます (そういえば上の例、引数評価してないな…)。なので上の例の<code>if</code>もメッセージ送信です。</p>
@@ -93,34 +98,51 @@
 <p>さて、この仕様と目標が定まるまでは紆余曲折がありました。設計のはじめからドードーグラフィックスをしたかったわけではないですし、オブジェクト指向っぽさも言語の機能をどうするか模索していたときに思い付いたものです。ここではどうやってオブジェクト指向に辿りついたのかを述べることで、言語設計の過程を晒しておきます。</p>
 <p>tanaka-lispの言語設計で最初にやったのは、機能やコンセプトはともあれコードがどういう見た目をしているかを考えることでした。<a href="https://github.com/t-sin/tanaka-lisp/blob/bb8b14d20c5e89ff8ad25156c8cf546f912e68ea/examples/layer1/01-hello-world.lisp">Hello world</a>はどう書くのか、<a href="https://github.com/t-sin/tanaka-lisp/blob/bb8b14d20c5e89ff8ad25156c8cf546f912e68ea/examples/layer1/03-control-flow.lisp">制御構文</a>は、というようなかんじで。Common Lispが好きなので意識をしつつ、「ぼくならこうあってほしいな」という好みを探りつつ書いていきました。</p>
 <p>ところでtanaka-lispは最初、共有ライブラリとして組み込み可能なLuaっぽいLisp言語で弾幕を記述することを目標にしていました。参考元であるLuaではハッシュテーブルに特殊なスロットがあるとオブジェクトになるのですが、それを真似してオブジェクト指向できると楽しいのではーとおもってモックをつくりながら (モックについては後述) 以下のような例をつくりました。</p>
-<pre><code class="language-lisp">
+<pre><code class="language-lisp">;; https://github.com/t-sin/tanaka-lisp/blob/bb8b14d20c5e89ff8ad25156c8cf546f912e68ea/examples/layer1/06-oop.lisp
+;; object oriented programming example
+
+;; creating classes
+;; `#{}` is a hash table literal
+;; class is a hash table that has a hash table named as `*meta*`
 (setq *animal*
   #{:*meta* #{:name :animal :parent nil}
     :say (lambda (self) (format t &quot;Animal!\n&quot;))})
+; =&gt; #{...}
 
 (setq *dodo*
   #{:*meta* #{:name :dodo :parent *animal*}
     :say (lambda (self)
               (send :say (get (get self :*meta*) :parent))
               (format t &quot;Dodo!!\n&quot;))})
+; =&gt; #{...}
 
 (send :say *animal*)
+; =&gt; Animal!
 
 (send :say *dodo*)
+; =&gt; Animal!
+;    Dodo!!
 </code></pre>
 <p>このとき、そういえばRubyに<code>method_missing</code> (Smalltalkの<code>doesNotUnderstand</code>) なる機能があったなと思いだしたのでモックに実装してみたのです。</p>
-<pre><code class="language-lisp">(setq obj #{:*meta* #{:parent nil}
+<pre><code class="language-lisp">;; https://github.com/t-sin/tanaka-lisp/blob/bb8b14d20c5e89ff8ad25156c8cf546f912e68ea/examples/layer1/06-oop.lisp のつづき
+;; Smalltalk's `doesNotUnderstand`
+;; or Ruby's `method_missing`
+(setq obj #{:*meta* #{:parent nil}
             :unknown-message (lambda (self msg &amp;rest args)
                                (cl:format t &quot;unknown message ~s with args: ~s&quot; msg args))})
 
 (send :hoge obj 1 2)
+; =&gt; unknown message :hoge with args (1 2)
 
+;; utilities
 (make-object :dodo *parent-object*)
+; =&gt; #{:*meta* #{:name :dodo :parent *parent-object*}}
 
 (define-message say dodo ()
   (format t &quot;say dodo!\n&quot;))
 
 (send :say dodo)
+; =&gt; say dodo!
 </code></pre>
 <p>これがまた動くんですよ。動いたのです。そして<code>はじめに</code>でも挙げたg000001さんの記事の影響もあって、組み込み言語という目標を捨てオブジェクト指向言語への道を進むことにしたのでした。</p>
 <p>オブジェクト指向について試行錯誤していると<code>(send :say dodo)</code>は単に<code>(say dodo)</code>でいいような気持ちがしてきます。オブジェクト指向できるだけの力を得たら<code>apply</code>による計算の世界から、メッセージ送信<code>send</code>による計算の世界へ移行できると思いました。またSmalltalk-72ではメッセージ送信時に評価がされないということを知ったり、MOPの記事でも触れられていた「メッセージをオブジェクト自身が評価する」からのインスパイアもあって、Lispの世界の上にリーダも評価プロセスもぜんぶオブジェクトとメッセージにした、オブジェクトの世界を構築するという目標が生まれました。</p>
@@ -128,7 +150,8 @@
 <p>言語設計を試行錯誤するときに、その対象言語が不完全ながらも存在していると使ってみないとわからないような使いにくさを洗い出す助けになります。<a href="https://github.com/cxxxr">cxxxrさん</a>から「Common Lispでモックしてみては？」と言われてやってみたのが<a href="https://github.com/t-sin/tanaka-lisp/tree/master/prototype">prototypeディレクトリ</a>です。</p>
 <p>tanaka-lispはわりとオーソドックスな見た目のLispなのでCommon Lispの処理系の一部を使い回せそうです。リーダは使い回せますし、評価システムもそうです。なので<code>tanaka-lisp</code>パッケージをつくって<code>defpackage</code>の<code>:use</code>を<code>nil</code>にして空パッケージを作成し、そこにtanaka-lispのオペレータを実装していくことで、SLIMEでtanaka-lispを体感しながら言語仕様を決めていくことができました。</p>
 <p>たとえば、繰り返しのためのLispレイヤーの特殊形式<code>loop</code>はモックでは以下のように定義されています。</p>
-<pre><code class="language-lisp">(cl:defmacro loop (&amp;rest args)
+<pre><code class="language-lisp">;; https://github.com/t-sin/tanaka-lisp/blob/bb8b14d20c5e89ff8ad25156c8cf546f912e68ea/prototype/layer1.lisp#L60
+(cl:defmacro loop (&amp;rest args)
   `(cl:loop
      :while ,(let ((while-clause (cl:getf args :while)))
                (if while-clause
@@ -137,7 +160,9 @@
      :do ,(cl:getf args :do)))
 </code></pre>
 <p><code>loop</code>特殊形式は以下のように</p>
-<pre><code class="language-lisp">(let ((n 0))
+<pre><code class="language-lisp">;; https://github.com/t-sin/tanaka-lisp/blob/bb8b14d20c5e89ff8ad25156c8cf546f912e68ea/examples/layer1/03-control-flow.lisp#L9
+;; loop
+(let ((n 0))
   (loop
     :while (&lt; n 3)  ; conditional form (optional)
     :do (do         ; body
