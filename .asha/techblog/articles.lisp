@@ -17,10 +17,9 @@
                  :NAME "2021-12-02_tanaka-lisp-progress"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2021-12-03T08:37:20.761478+09:00"
-                 :UPDATED-AT ""
+                 :UPDATED-AT "2021-12-04T11:44:27.597142+09:00"
                  :PATHSTR "techblog/2021-12-02_tanaka-lisp-progress.md"
-                 :TAGS ("プログラミング" "言語処理系" "言語実装" "Lisp" "C言語"
-                        "Lispアドベントカレンダー"))
+                 :TAGS ("プログラミング" "言語処理系" "言語実装" "Lisp" "C言語" "アドベントカレンダー"))
               #S(ASHA.WEBSITE:CONTENT
                  :NAME "2021-10-27_generative-art-synchronized-with-music"
                  :TEMPLATE-NAME NIL
