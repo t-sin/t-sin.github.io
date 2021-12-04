@@ -1,0 +1,267 @@
+<html>
+  <head prefix="og: http://ogp.me/ns#">
+    <meta charset="UTF-8">
+    <title>RustでつくるVST3プラグイン - 技術の記録 - Ibotenic</title>
+    <link href="/style.css" rel="stylesheet">
+
+    
+<link href="/markdown.css" rel="stylesheet">
+<link href="/techblog/style.css" rel="stylesheet">
+
+<meta name="og:url" content="https://t-sin.github.io/">
+<meta name="og:title" content="Ibotenic - diary - RustでつくるVST3プラグイン">
+<!--meta name="og:image" content="https://www.itra.co.jp/uploads/media/2019/05/20190528171315_1.jpg"-->
+<meta name="og:description" content="
+RustでVST3のシンセプラグインを開発できるよ！ という記事です。
+">
+<meta name="og:type" content="article">
+
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/" class="website-title">Ibotenic</span>
+        <span class="website-by">by</span>
+        <span class="website-author">t-sin</span>
+      </h1>
+      <hr />
+      <nav>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/works.html">Works</a></li>
+          <li><a href="/techblog/">Tech Blog</a></li>
+          <li><a href="/diary/">Diary</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="content">
+      
+<h1>RustでつくるVST3プラグイン</h1>
+<div class="article-info">
+  <p>
+    
+    <a class="tag" href="プログラミング.html">プログラミング</a>
+    
+    <a class="tag" href="デジタル信号処理.html">デジタル信号処理</a>
+    
+    <a class="tag" href="チップチューン.html">チップチューン</a>
+    
+    <a class="tag" href="VST3.html">VST3</a>
+    
+    <a class="tag" href="Rust.html">Rust</a>
+    
+    <a class="tag" href="アドベントカレンダー.html">アドベントカレンダー</a>
+    
+  </p>
+  <p class="created-at">2021-12-04T11:39:48.247450+09:00</p>
+  <p class="description">
+RustでVST3のシンセプラグインを開発できるよ！ という記事です。
+</p>
+</div>
+
+<article>
+  <p>この記事は<a href="https://qiita.com/advent-calendar/2021/rust">Rustアドベントカレンダー3</a>の4日目の記事です。</p>
+<h2>はじめに</h2>
+<p>ぼくはDTM (DeskTop Music) をUbuntu上でやっております。GNU/LinuxでDTMするとなると、Windows/mac向けのシンセサイザープラグインやエフェクトプラグインが (.dllとかなので) 動かない、DAW (Digital Audio Workstation; ざっくり言えば作曲ソフト) の選択肢があまりない、などの制約があり苦労することが多いです。</p>
+<p>チップチューン (ファミコンやゲームボーイふうの音楽) が好きなのでたまにつくったりするのですがそのとき、ゲームボーイふうの音が出せるシンセプラグインがGNU/Linux向けのものでは選択肢がほぼなしという状況です。Windowsとかだと<a href="https://blog.ajitama-note.com/entry/2021/03/06/215656">こんなに選択肢ある</a>のに……どうして……。</p>
+<p>DAWにおけるシンセ/エフェクトプラグインの規格として、CubaseというDAWを開発しているドイツのSteinberg社が策定したVST (Virtual Studio Technology) という規格がかなり普及しています。この規格のSDKはC++のインターフェースを持っているのですが、これをRustで呼びだせる<a href="https://github.com/RustAudio/vst3-sys">vst3-sys</a>というクレートがあることを知ってしまいました。いままでは「C++だから」と敬遠していましたがRustで書けるとなると話は別です。そしてそんなときに、チップチューンシンセがほしいというアイデアもあったため、開発を開始しました。</p>
+<p>というわけで、この記事ではRustでゲームボーイ風な音を出すVST3プラグイン<a href="https://github.com/t-sin/soyboy-sp.vst3">SoyBoy SP</a>を開発している話を書きます。</p>
+<h2>VST3とは</h2>
+<p>まず、VST3について説明しておきましょう。</p>
+<p>「はじめに」で述べたとおり、DAWで使えるシンセ・エフェクトのプラグイン規格です。&quot;3&quot;とついていることからわかるように古い規格であるVST2もあります。具体的な違いについてはこちらの<a href="https://96bit-music.com/vst2-vst3/">&quot;DTMプラグインvst2とvst3の違いについてCPU負荷が軽いのは？ | 96bit-music&quot;</a>に詳しいですが、もちろん機能が増えています。たとえば音声信号を64bit浮動小数点で処理できるようになる、など。VST3が開発されたのは2008年だそうですから、2021年においてプラグイン開発をするならVST2を選ぶ理由はあまりなさそうです。</p>
+<p>ちなみにVST3についてはこちらの記事<a href="https://qiita.com/hotwatermorning/items/7f1049a7222aa59a425c">&quot;VST3 SDKについて - Qiita&quot;</a>もその現状や問題点がまとまっていて勉強になります。</p>
+<p>VST3プラグインを開発するには (通常は) Steinbergの配布するSDKを利用する必要があります。SDKの言語がC++であることが1つの挑戦の障壁になりえますがそれよりも、SDKが必要というのはなんともめんどくさいです。SDKの取得にアカウント登録が必要な気がしていたのですがVST2のころの話であるか、あるいは気のせいでした。アカウント登録は不要です。</p>
+<h3>vst3-sys</h3>
+<p>とはいえSDKを別途ダウンロードして開発するのめんどうだなと思っていたら、RustでVST3プラグインを書けるクレートvst3-sysはSDKレスでプラグインを開発できるというではありませんか。Rustコードを<code>cargo build</code>するだけビルドできるということで、楽です。すごくすてきです。これを使うほかないですね。</p>
+<p>examplesのコードを実際に手順書どおりにビルドしてみると、たしかにDAWから読み込めるVST3プラグインをつくることができました。SDKレス、ヤバい。万歳。</p>
+<h3>VST-MA</h3>
+<p>しかしSDKレスでプラグインが書ける仕組みはだいぶ謎ですよね。これにはプラグインのアーキテクチャが関わっています。</p>
+<p>VST3では<a href="https://developer.steinberg.help/display/VST/VST+Module+Architecture">VST-MA (VST Module Archtecture)</a> というしくみをプラグインに採用しています。VST-MAはMicrosoftのCOM (Component Object Model) ベースの技術で、COMはバイナリソフトウェアコンポーネントの相互作用をクロスプラットフォームかつ実装言語非依存に実現するしくみのようです。</p>
+<p>COMを使うとどうしてクロスプラットフォームになるのかですが、<a href="https://www.codeproject.com/Articles/13601/COM-in-plain-C">&quot;COM in plain C - CodeProject&quot;</a>にあるように、Cレベルのインターフェースが決まっているためそれを守っていれば言語やプラットフォームを問わないやりとりができるという感じらしいです。</p>
+<p>vst3-sysクレートも内部に<a href="https://github.com/RustAudio/vst3-sys/tree/master/com">com-rsクレートのフォーク</a>を内蔵しており、COM越しにやりとりをすることでSDKレスでのプラグイン開発ができるのです。</p>
+<h2><code>examples/again</code>を覗いてみる</h2>
+<p>ではRustでどのようにVST3プラグインを実装するのか、サンプルコードを見てみましょう。</p>
+<ul>
+<li><a href="https://github.com/RustAudio/vst3-sys/blob/425f386d1f012479fe111b17b6203eab55e5e1db/examples/again/src/lib.rs">vst3-sysのexamples/again (音量調節プラグイン) のソースコード</a></li>
+</ul>
+<p>なんという物量。そしてなんというunsafeまみれなコードでしょう。COMのやりとりや状態の受け渡しに生ポインタの操作を行うので、VST3のAPIは基本的にunsafeです。このunsafeさと物量に気圧されてはいけません。COMのインターフェースを書くコードは決まりきったことをしているだけなので心を無にして書き写せばなんとかなります。unsafeのほうはというと、たしかにCOM境界部分はunsafeになってしまうのですが、その内側にプラグインの処理本体を書くときはunsafeである必要がないのでunsafeはでてきません。</p>
+<p>このサンプルコードでプラグインの本質的なことをやっているのは以下の箇所です:</p>
+<ul>
+<li><a href="https://github.com/RustAudio/vst3-sys/blob/425f386d1f012479fe111b17b6203eab55e5e1db/examples/again/src/lib.rs#L182">プラグインホスト (DAW) にこのプラグインのI/O情報を教えてている箇所</a></li>
+<li><a href="https://github.com/RustAudio/vst3-sys/blob/425f386d1f012479fe111b17b6203eab55e5e1db/examples/again/src/lib.rs#L416">UIから通達されたパラメータの変更を取り出している箇所</a></li>
+<li><a href="https://github.com/RustAudio/vst3-sys/blob/425f386d1f012479fe111b17b6203eab55e5e1db/examples/again/src/lib.rs#L181">毎サンプルごとの信号の計算をやってる箇所</a></li>
+</ul>
+<p>VST3では (VST2もそうだったみたいですが) 信号処理部とパラメータ操作部が別スレッドで走ります。そのため信号処理部だけを実装したサンプル<a href="https://github.com/RustAudio/vst3-sys/blob/425f386d1f012479fe111b17b6203eab55e5e1db/examples/passthru.rs">passthru.rs</a>では、DAWに読みこんでもパラメータなしのプラグインと認識されます。</p>
+<p>VST3プラグインのつくりかたについて、<a href="https://www.utsbox.com/?page_id=1316">&quot;VST3プラグインの作り方 | C++でVST作り&quot;</a>がとても詳しいので紹介しておきます。</p>
+<h2>正弦波を鳴らしたい</h2>
+<p>上の例は単純なエフェクトプラグインでした。でもせっかくVST3プラグインが書けるのですし自分で音を生成して鳴らしたいですよね。DAWから送られてくる音符のオン・オフ情報に反応してサイン波の音を鳴らすシンセサンプルが、あればいいのに。なぜないのか。こんなのおかしいよ。むむむ。だれか…。生えろ…！ 生えてきてくれ…！！ </p>
+<p>生えました🥳: <a href="https://github.com/t-sin/rust-vst3-example">https://github.com/t-sin/rust-vst3-example</a></p>
+<p>こんなふうに使えます。</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0sohZOrF6R4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<h3>アーキテクチャ</h3>
+<p>Piというシンセを用意してみました。正弦波の音が鳴るだけですが、unsafeなVST3との境界世界とプラグインでやりたいことを実現する部分をモジュール毎わけています。図にするとこんな感じです。</p>
+<pre><code>+-----------------+
+| DAW (VSTホスト) |
++-----------------+
+       ｜
+       ｜初期化してイベントとか通達
+       ｜
+       ↓
++----------------+  信号くれー         +--------------+
+| plugin.rs      |  イベントきたよー   | piモジュール |
+| (unsefeな世界) |  ----------------&gt;  | (safeな世界) |
++----------------+                     +--------------+
+       ↑
+       ｜ (VSTホストを介して)パラメータとか通信
+       ↓
++----------------+
+| controller.rs  |
+| (unsefeな世界) |
++----------------+
+</code></pre>
+<p>vst3-sysを介して外界とやりとりのを担当するコードが<code>src/vst3</code>ディレクトリにあり、<code>plugin.rs</code>が音声処理部のコードで<code>controller.rs</code>がパラメータのGUIからの操作を受けるコードです。</p>
+<p><code>src/pi</code>ディレクトリに入っているのが実際にサイン波信号を計算し、イベントがきたら音の生成パラメータを変更するなどの「やりたいこと」をやっているコードです。</p>
+<h3>VST3の信号処理部でやること</h3>
+<p>VST3の信号処理部のメイン処理は<code>IAudioProcessor</code>トレイトの<code>process</code>関数です。ここで</p>
+<ol>
+<li>操作されたパラメータの処理</li>
+<li>外部から入力されたイベント (音鳴らせ！など) の処理</li>
+<li>信号の計算</li>
+</ol>
+<p>をやります。</p>
+<p>そのうち信号の計算は、信号をまとめて計算し関数引数で渡されたバッファ (生ポインタ) に格納します。バッファを用いるのは (音系プログラムではよくあるのですが) サンプリング周期ごとに信号を計算していたら処理のオーバーヘッドが大きいからです。サンプリング周期、一般的には44.1kHzとかですからね。たいへんです。</p>
+<p>ともあれ、ここでは単にバッファのサイズ分だけ<code>PiSynth</code>構造体のprocessメソッドを呼んで終わりです。音のオンオフ等の処理は<code>process</code>メソッドの中でやっています。</p>
+<pre><code class="language-rust">// https://github.com/t-sin/rust-vst3-example/blob/293f09118721fb425a6f1208be1686947b6ec1e3/src/vst3/plugin.rs#L365
+
+        match data.symbolic_sample_size {
+            K_SAMPLE32 =&gt; {
+                for n in 0..num_samples as isize {
+                    let s = self.pi.borrow_mut().process(sample_rate);
+
+                    for i in 0..num_output_channels as isize {
+                        let ch_out = *out.offset(i) as *mut f32;
+                        *ch_out.offset(n) = s.0 as f32;
+                    }
+                }
+
+                kResultOk
+            }
+        ...
+</code></pre>
+<h3>Piの信号処理</h3>
+<p>Piのprocessメソッドは、自前の<code>AudioProcessor</code>トレイトのメソッドでした。ノートオン (音を鳴らす) 状態のときには計算した信号を返し、そうでないときは無音としています。</p>
+<pre><code class="language-rust">// https://github.com/t-sin/rust-vst3-example/blob/293f09118721fb425a6f1208be1686947b6ec1e3/src/pi/mod.rs#L75
+impl AudioProcessor&lt;Signal&gt; for PiSynth {
+    fn process(&amp;mut self, sample_rate: f64) -&gt; Signal {
+        let osc = self.osc.process(sample_rate);
+        let v = if self.note_on { 0.3 * osc } else { 0.0 };
+
+        (v, v)
+    }
+}
+</code></pre>
+<p><code>self.note_on</code>はVST3側のイベントの処理で<code>Triggered</code>トレイトを通じて変更しています。興味がありましたら見てみてください。</p>
+<h3>正弦波の計算</h3>
+<p>正弦波の計算をするオシレータの処理はこのようになっています。</p>
+<pre><code class="language-rust">// https://github.com/t-sin/rust-vst3-example/blob/293f09118721fb425a6f1208be1686947b6ec1e3/src/pi/sine.rs#L37
+impl AudioProcessor&lt;f64&gt; for SineOscillator {
+    fn process(&amp;mut self, sample_rate: f64) -&gt; f64 {
+        let phase_diff = (self.freq * self.pitch) * 2.0 * std::f64::consts::PI / sample_rate;
+        self.phase += phase_diff;
+
+        self.phase.sin()
+    }
+}
+</code></pre>
+<p><code>self.phase</code>は<code>sin(x)</code>の<code>x</code>の部分です。こいつを所望の音の高さ (周波数) になるように動かしていくと、音階がだせます。<code>self.freq</code>が現在鳴らしている音の周波数で、<code>self.pitch</code>は「パラメータで鳴ってる音の高さちょっと変えたいな」というとき用のモディファイアです。デジタル信号において、ある周波数の信号がほしいとき<code>x</code>の値の増分は<code>f * 2 * PI / sample_rate</code>なので、fの部分に<code>self.pitch</code> (比) と<code>self.freq</code> (Hz) を掛けたものを代入したのが<code>phase_diff</code>の右辺です。</p>
+<p>このあたりの計算は慣れればなんとなく書けるようになります。ご安心ください。</p>
+<h2>自作チップチューンシンセSoyBoy SP</h2>
+<p>これらのことを踏まえてもりもりと実装していっているのが、<a href="https://github.com/t-sin/soyboy-sp.vst3">SoyBoy SP</a>というVST3シンセです。GNU/Linuxでもチップチューンするんだもんという強い意思の顕れです。このシンセはゲームボーイふうの音をつくることができ、以下のような機能があります。</p>
+<ul>
+<li>3つのオシレータ
+<ul>
+<li>矩形波 (duty比選択可)</li>
+<li>ノイズ (ノイズ周期選択可)</li>
+<li>波形テーブル (テーブル編集可)</li>
+</ul>
+</li>
+<li>なんちゃってDAC機能 (ローパスフィルタ)</li>
+<li>MIDIのピッチベンドに対応</li>
+<li>矩形波オシレータには周波数モディファイア搭載</li>
+<li>ノートディレイ搭載</li>
+</ul>
+<p>現状、実装しようと思っていた機能は全て実装が完了しており、専用のGUIを用意する準備中という段階です。GUIのデザインはだいたい確定していて (<a href="https://github.com/t-sin/soyboy-sp.vst3/blob/e5811f7f782ade8fff8b994df72b9fa85c1cc1ce/doc/soyboy-ui-mock.png">モックがこれ</a>) 、あとは実装するのに<a href="https://github.com/redox-os/orbtk">OrbTk</a>を用いるか<a href="https://github.com/emilk/egui">egui</a>を用いるか、どちらにしようかなあと悩んでいます。</p>
+<h2>まとめ</h2>
+<p>本記事では</p>
+<ol>
+<li>VST3プラグインをつくりたい背景を述べ、</li>
+<li>VST3プラグインとは何かを説明し、</li>
+<li>VST3プラグインの実装方式を簡単に説明し、</li>
+<li>つくっているVST3プラグインの紹介をしました。</li>
+</ol>
+<p>音系のアイデアをソフトウェアとして試作するときVST3プラグインとして使えるように実装しておくと、DAWの機能 (譜面の再生、他のエフェクトとの協調、GUI) を使ってデバッグや試験ができるので便利だと思います。一度なにかを実装して覚えておきそれをテンプレートとして使い回せるようにしておくと、以降の試作が簡単になりそうだなあと感じました。</p>
+<p>みなさんも気軽にシンセやエフェクトをつくってみてください。では、Happy Hacking！</p>
+<h2>おまけ</h2>
+<p>むかしに「ファイルシステムを操作すると音がでる」というプログラムをRustで書きました。<a href="https://github.com/t-sin/koto">Koto</a>といいます。使いやすいとは言えないですが、初Rustプロジェクトで思い入れが深いので宣伝でした。</p>
+
+</article>
+
+
+      <div id="page-info">
+        <p>
+RustでVST3のシンセプラグインを開発できるよ！ という記事です。
+</p>
+        
+        <p>
+          タグ:
+          
+          <a href="プログラミング.html">プログラミング</a>
+          ,
+          
+          <a href="デジタル信号処理.html">デジタル信号処理</a>
+          ,
+          
+          <a href="チップチューン.html">チップチューン</a>
+          ,
+          
+          <a href="VST3.html">VST3</a>
+          ,
+          
+          <a href="Rust.html">Rust</a>
+          ,
+          
+          <a href="アドベントカレンダー.html">アドベントカレンダー</a>
+          
+          
+        </p>
+        
+        <p>作成日時: 2021-12-04T11:39:48.247450+09:00</p>
+        <p>更新日時: -</p>
+      </div>
+
+      
+<nav>
+  <div class="article-nav nav-left">
+    <p class="nav-label">1つ新しい記事</p>
+    
+    <a href="2021-12-02_tanaka-lisp-progress.html">自作言語tanaka-lispの進捗報告</a>
+    
+  </div>
+
+  <div class="article-nav nav-right">
+    <p class="nav-label">1つ古い記事</p>
+    
+    -
+    
+  </div>
+</nav>
+
+    </div>
+
+    <footer>
+      <hr>
+      <p><a href="https://github.com/t-sin/t-sin.github.io">Here is the source code of this site.</a></p>
+    </footer>
+  </body>
+</html>
