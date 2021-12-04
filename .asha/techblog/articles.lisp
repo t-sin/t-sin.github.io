@@ -6,6 +6,14 @@
    :TAG-TEMPLATE-NAME "techblog.tag-template"
    :INDEX-TEMPLATE-NAME "techblog.index-template"
    :ARTICLES (#S(ASHA.WEBSITE:CONTENT
+                 :NAME "2021-12-04_vst3-plugin-in-rust"
+                 :TEMPLATE-NAME NIL
+                 :CREATED-AT "2021-12-04T11:39:48.247450+09:00"
+                 :UPDATED-AT ""
+                 :PATHSTR "techblog/2021-12-04_vst3-plugin-in-rust.md"
+                 :TAGS ("プログラミング" "デジタル信号処理" "チップチューン" "VST3" "Rust"
+                        "アドベントカレンダー"))
+              #S(ASHA.WEBSITE:CONTENT
                  :NAME "2021-12-02_tanaka-lisp-progress"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2021-12-03T08:37:20.761478+09:00"
