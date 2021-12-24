@@ -1,0 +1,167 @@
+<html>
+  <head prefix="og: http://ogp.me/ns#">
+    <meta charset="UTF-8">
+    <title>自作言語tanaka-lispの進捗報告 〜 1ヶ月後編 - 技術の記録 - Ibotenic</title>
+    <link href="/style.css" rel="stylesheet">
+
+    
+<link href="/markdown.css" rel="stylesheet">
+<link href="/techblog/style.css" rel="stylesheet">
+
+<meta name="og:url" content="https://t-sin.github.io/">
+<meta name="og:title" content="Ibotenic - diary - 自作言語tanaka-lispの進捗報告 〜 1ヶ月後編">
+<!--meta name="og:image" content="https://www.itra.co.jp/uploads/media/2019/05/20190528171315_1.jpg"-->
+<meta name="og:description" content="
+絶賛開発中の自作言語tanaka-lispの進捗報告をします。
+">
+<meta name="og:type" content="article">
+
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/" class="website-title">Ibotenic</span>
+        <span class="website-by">by</span>
+        <span class="website-author">t-sin</span>
+      </h1>
+      <hr />
+      <nav>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/works.html">Works</a></li>
+          <li><a href="/techblog/">Tech Blog</a></li>
+          <li><a href="/diary/">Diary</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="content">
+      
+<h1>自作言語tanaka-lispの進捗報告 〜 1ヶ月後編</h1>
+<div class="article-info">
+  <p>
+    
+    <a class="tag" href="プログラミング.html">プログラミング</a>
+    
+    <a class="tag" href="言語処理系.html">言語処理系</a>
+    
+    <a class="tag" href="言語実装.html">言語実装</a>
+    
+    <a class="tag" href="Lisp.html">Lisp</a>
+    
+    <a class="tag" href="C言語.html">C言語</a>
+    
+    <a class="tag" href="アドベントカレンダー.html">アドベントカレンダー</a>
+    
+  </p>
+  <p class="created-at">2021-12-24T17:02:06.931205+09:00</p>
+  <p class="description">
+絶賛開発中の自作言語tanaka-lispの進捗報告をします。
+</p>
+</div>
+
+<article>
+  <p>この記事は<a href="https://qiita.com/advent-calendar/2021/lisp">Lispアドベントカレンダー2021</a>の24日目の記事です。</p>
+<h2>TL; DR</h2>
+<p>自作Lispすすみました。</p>
+<h2>はじめに</h2>
+<p>自作Lispをつくっています、という話は<a href="2021-12-02_tanaka-lisp-progress.html">アドベントカレンダー2日目の記事</a>に書きました。今日は24日。あれからどのような進捗がでたのかを書きます。</p>
+<h2>2日目の状態と24日目時点の状態</h2>
+<p>本記事を書いている時点での<a href="https://github.com/t-sin/tanaka-lisp/commit/390abdc1355d236c988d9cb4dffc4017207165ef">最新コミットはこちら</a>です。比較のためcompareを出してみました。</p>
+<ul>
+<li><a href="https://github.com/t-sin/tanaka-lisp/compare/bb8b14d20c5e89ff8ad25156c8cf546f912e68ea...390abdc1355d236c988d9cb4dffc4017207165ef">2日目記事時点から本記事執筆時点までのcompare</a></li>
+</ul>
+<p>61コミッツ！ 意外とがんばっていますね。何が増えたのかはTODO.mdのdiffを見るとよいでしょう。</p>
+<pre><code class="language-diff">      - [x] integers
+      - [ ] floating point numbers
+-     - [ ] dot pairs
+-        - [ ] garbage collection
+-     - [ ] proper lists
+-     - [ ] arrays
+-     - [ ] hash tables
++     - [x] dot pairs
++         - [x] garbage collection
++         - [x] `()`
++     - [x] proper lists
++     - [x] arrays
++     - [x] hash tables
+      - [ ] symbols
+      - [ ] keywords
+</code></pre>
+<p>ふむふむ。ドット対とリストと配列とハッシュテーブルが登場したと。GCはつくってると2日目記事でも言ってましたが、無事完成しました。ただテストあまり書いてないのですよね。いまはGCのルートオブジェクトは標準入出力だけしかないのであまりGCの領域を深くコピーする (※コピーGCです) 状況が発生せず大抵ぜんぶ片付けられてしまうので、束縛 (やコールスタック) が誕生したあたりで不可解な現象を楽死めそうです。</p>
+<p>あとはハッシュテーブル。<code>#{1 100 1 200}</code>が<code>#{1 200}</code>になってほしい問題はおもしろかったです。キーの比較を<code>eq</code>ではなく<code>eql</code>でやらないと整数 (internとかないのでオブジェクト同値にはならない) がハッシュ値同じにならないな、と思って<code>eql</code>を追加しました。が、そもそも問題はハッシュ関数の問題でした。脳死で<code>uintptr_t</code>を剰余するハッシュ関数で最初実装していたので<code>eql</code>の前のところでポインタ同値を見ていて意味がなかったという。なので最終的にはもうちょっとobject-awareなハッシュ関数を実装して (<a href="https://github.com/t-sin/tanaka-lisp/commit/390abdc1355d236c988d9cb4dffc4017207165ef">このコミット</a>)対処しました。~~まあタグ値足して剰余の脳死実装なのは変わりませんが。~~</p>
+<p><code>read</code>と<code>print</code>にはテスト書いてないので、細かいところの挙動は不安です。そういえばハッシュテーブルもテストまだしてない。テストしたい。めんどい。つらい。</p>
+<p><code>read</code>といえば、2日目にはこんなことも言っていました:</p>
+<blockquote>
+<p>あとはひたすら実装していくだけなのですが、継続の実現だったり、途中で止められるパーサだったり、大きなものもつくらねばならないのでじっくり楽しめそうです。GCもありますしね。</p>
+</blockquote>
+<p>途中で止められるパーサにしたかったですが、ちょっと今の肥大化したリーダをそうするのはむずかしそうだなーどうしようかなー、という感じです。そういえば存在をスキップされた浮動小数点数とかもあります。2日目時点けっこう疲れていて複雑化しそうな整数・浮動小数点数のリーダと向き合えますか、という意味では向き合えなかったので放置しています。モチベを維持することを優先した結果です。</p>
+<h2>今後のこと at 24日目</h2>
+<p>直近次につくるのはシンボルですね。シンボルなので<code>intern</code>機構やグローバル束縛の概念が必要になるので骨太そうです。ユーザが触れるパッケージは実装しないつもりなので、シンボルとキーワードは単純に固定の2パッケージに入るようなのを考えてます。</p>
+<p>シンボルが終わると組み込みの型の実装フェーズは終了するので、次は特殊形式を充実させていきます。<code>cond</code>とか<code>let</code>とか<code>lambda</code>とか。たのしそうですね。わくわくしてきました。</p>
+<p>tanaka-lispはアドベントカレンダーの記事のためというのもあって12月はもりもり触っていましたが、今後はちまちま進めていくことにしました。c-lessonの第三回に改めて取り組みたいですし、勢いでD言語を触りはじめたし、あと年末年始はゲームボーイエミュレータつくりにちょっと挑戦したい。</p>
+<h2>余談</h2>
+<p>ベアメタル de Lispしたくなってしまった今日このごろです。</p>
+<p><a href="https://www.lambdanote.com/products/nmonthly-vol-1-no-2-2019">n月刊ラムダノートの川合史郎さんのLISP 1.5記事</a>を読み返していたんですが、純Lispの基本関数・特殊形式って自己記述のための機械語といって差し支えないなと思ったのですよ。これらを機械語に落し込めばベアメタルでLispできそう（それはそう</p>
+<p>なので機械語Lisp挑戦したい。したい。</p>
+
+</article>
+
+
+      <div id="page-info">
+        <p>
+絶賛開発中の自作言語tanaka-lispの進捗報告をします。
+</p>
+        
+        <p>
+          タグ:
+          
+          <a href="プログラミング.html">プログラミング</a>
+          ,
+          
+          <a href="言語処理系.html">言語処理系</a>
+          ,
+          
+          <a href="言語実装.html">言語実装</a>
+          ,
+          
+          <a href="Lisp.html">Lisp</a>
+          ,
+          
+          <a href="C言語.html">C言語</a>
+          ,
+          
+          <a href="アドベントカレンダー.html">アドベントカレンダー</a>
+          
+          
+        </p>
+        
+        <p>作成日時: 2021-12-24T17:02:06.931205+09:00</p>
+        <p>更新日時: -</p>
+      </div>
+
+      
+<nav>
+  <div class="article-nav nav-left">
+    <p class="nav-label">1つ新しい記事</p>
+    
+    <a href="2021-12-04_vst3-plugin-in-rust.html">RustでつくるVST3プラグイン</a>
+    
+  </div>
+
+  <div class="article-nav nav-right">
+    <p class="nav-label">1つ古い記事</p>
+    
+    -
+    
+  </div>
+</nav>
+
+    </div>
+
+    <footer>
+      <hr>
+      <p><a href="https://github.com/t-sin/t-sin.github.io">Here is the source code of this site.</a></p>
+    </footer>
+  </body>
+</html>
