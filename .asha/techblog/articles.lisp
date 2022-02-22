@@ -9,7 +9,7 @@
                  :NAME "2022-02-22_c-lesson-03"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2022-02-22T15:57:03.428471+09:00"
-                 :UPDATED-AT ""
+                 :UPDATED-AT "2022-02-22T16:14:44.093964+09:00"
                  :PATHSTR "techblog/2022-02-22_c-lesson-03.md"
                  :TAGS ("プログラミング" "C言語" "言語処理系"))
               #S(ASHA.WEBSITE:CONTENT
