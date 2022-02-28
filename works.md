@@ -45,6 +45,8 @@
 - [Rosa](https://github.com/t-sin/rosa) (Common Lisp)
     - テキストデータにメタデータを付与する構文を与える言語。
     - パーサがついている。
+- [Soyboy SP](https://github.com/t-sin/soyboy-sp.vst3) (Rust)
+    - チップチューン向けVST3プラグイン。
 
 ### メディア・インタラクティブ系
 
@@ -64,6 +66,8 @@
 
 - [天書](https://github.com/t-sin/tensho) (JavaScript)
     - 円城塔『文字渦』のパロディ。
+- [LambdaBoy](https://github.com/t-sin/lambdaboy) (Common Lisp)
+    - 実装中のゲームボーイエミュレータ。
 
 ### 実験系
 
@@ -81,3 +85,6 @@
     - 初めてつくったLisp処理系。頓挫とかした。
 - [Mark](https://github.com/t-sin/mark) (C)
     - Lispでリスを実装するプロジェクト。
+- [tanaka-lisp](https://github.com/t-sin/tanaka-lisp) (C)
+    - あるていど本格的なLisp処理系を作ってみるプロジェクト。
+    - Smalltalk-72方式オブジェクト指向を目指してる。
