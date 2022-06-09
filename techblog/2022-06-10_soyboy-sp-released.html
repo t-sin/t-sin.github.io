@@ -1,0 +1,330 @@
+<html>
+  <head prefix="og: http://ogp.me/ns#">
+    <meta charset="UTF-8">
+    <title>Rust製チップチューンシンセのSoyBoy SPをリリースしました - 技術の記録 - Ibotenic</title>
+    <link href="/style.css" rel="stylesheet">
+
+    
+<link href="/markdown.css" rel="stylesheet">
+<link href="/techblog/style.css" rel="stylesheet">
+
+<meta name="og:url" content="https://t-sin.github.io/">
+<meta name="og:title" content="Ibotenic - diary - Rust製チップチューンシンセのSoyBoy SPをリリースしました">
+<!--meta name="og:image" content="https://www.itra.co.jp/uploads/media/2019/05/20190528171315_1.jpg"-->
+<meta name="og:description" content="
+開発していたRust製のチップチューン用VST3プラグイン、SoyBoy SPが無事v1.0.0になり頒布開始できました。この記事ではSoyBoyの紹介と開発の苦労話などを記しています。
+">
+<meta name="og:type" content="article">
+
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/" class="website-title">Ibotenic</span>
+        <span class="website-by">by</span>
+        <span class="website-author">t-sin</span>
+      </h1>
+      <hr />
+      <nav>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/works.html">Works</a></li>
+          <li><a href="/techblog/">Tech Blog</a></li>
+          <li><a href="/diary/">Diary</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="content">
+      
+<h1>Rust製チップチューンシンセのSoyBoy SPをリリースしました</h1>
+<div class="article-info">
+  <p>
+    
+    <a class="tag" href="プログラミング.html">プログラミング</a>
+    
+    <a class="tag" href="Rust.html">Rust</a>
+    
+    <a class="tag" href="音楽.html">音楽</a>
+    
+    <a class="tag" href="デジタル信号処理.html">デジタル信号処理</a>
+    
+    <a class="tag" href="サウンドプログラミング.html">サウンドプログラミング</a>
+    
+    <a class="tag" href="VST3.html">VST3</a>
+    
+  </p>
+  <p class="created-at">2022-06-10T00:53:20.662485+09:00</p>
+  <p class="description">
+開発していたRust製のチップチューン用VST3プラグイン、SoyBoy SPが無事v1.0.0になり頒布開始できました。この記事ではSoyBoyの紹介と開発の苦労話などを記しています。
+</p>
+</div>
+
+<article>
+  <h2>はじめに</h2>
+<p>6月になってしまいました。アジサイが咲きはじめ、そろそろ梅雨もやってきますね。そうするとキノコのシーズンが到来します。そんな生命の活力に世が沸かんとしている今日このごろ、ずっとつくっていたVST3規格のシンセプラグインSoyBoy SPをリリースしました。</p>
+<p>たぶん半年くらい開発してたものが今回日の目を見るに至ったということで、開発やリリースの振り返りとかしてみようと思います。</p>
+<h2>SoyBoy SPってなに</h2>
+<p>SoyBoy SP (リポジトリ: <a href="https://github.com/t-sin/soyboy-sp.vst3">soyboy-sp.vst3</a>、<a href="https://t-sin.github.io/soyboy-sp.vst3/index.ja.html">日本語ウェブサイト</a>)はゲームボーイふうの音がだせる作曲ソフト (DAW; Digital Audio Workstation) 向けのシンセサイザープラグインで、VST3というプラグイン規格に対応したソフトウェアで使うことができます。チップチューンという、ファミコンやゲームボーイの音を指向したジャンル向けに使えるようにつくりました。過去に<a href="https://qiita.com/advent-calendar/2021/rust">Rustアドベントカレンダー2021</a>向けに書いた記事<a href="./2021-12-04_vst3-plugin-in-rust.html">『RustでつくるVST3プラグイン』</a>の最後に宣伝しているやつの完成版です。</p>
+<p>ゲームボーイ音源としての機能として以下</p>
+<ul>
+<li>矩形波、ノイズ、波形メモリ音源 (4bit32サンプル) の3種の音源</li>
+<li>矩形波音源はデューティ比を12.5%、25%、50%、75%から選択可能</li>
+<li>ノイズ音源は乱数値の更新間隔を設定可能</li>
+<li>ゲームボーイの持つ周波数スイープ (音程を自動で上げ下げする機能) のエミュレーション</li>
+</ul>
+<p>が主要な機能です。SoyBoy SP独自の機能として</p>
+<ul>
+<li>ADSRエンベロープ (GBにはエンベロープジェネレータはあるがADSRではなかったはず)</li>
+<li>Stutter機能 (要はノートディレイ。<a href="https://www.korg.com/jp/products/dj/volca_beats/">KORG volca beats</a>にインスパイアされました)</li>
+<li>同時発音数を変更可能 (GBは単音しかでない)</li>
+</ul>
+<p>があります。</p>
+<h3>開発の動機</h3>
+<p>開発の動機は、GNU/Linux環境で使えるチップチューン向けのプラグインがないことでした。GNU/Linux環境はWindowsやmac OSに比べてDTM環境が貧弱になりがちなことをUbuntuでDTMしていて日々ひしひしと感じます。チップチューンがすきなのでやりたいけど、有名なチップチューンプラグイン音源はたいていWindowsかmac向けです。</p>
+<p>いや、ほんとはじつはそんなこともなくて、<a href="https://www.winehq.org">Wine</a>を利用したりしてWindows向けプラグインを気合いでGNU/Linuxで動かせば、<a href="https://ymck.net/app/magical-8bit-plug">magical 8bit plug</a> (チップチューンバンド<a href="https://ymck.net">YMCK</a>の方がつくったファミコンふうシンセ) や<a href="https://www.native-instruments.com/jp/products/komplete/samplers/kontakt-6/">KONTAKT</a> (Native Instruments社のサンプラープラグイン。サードパーティがKONTAKT用のサンプルを公開できるようになっており、リアルな音源がたくさんある) を動かすことも可能であったりします。が、GNU/Linuxがターゲットになっているか・視野に入っているかというのはGNU/Linuxユーザとしてはやはり気になるわけです。</p>
+<p>そして、あとはVSTプラグインを自作するのは大学生くらいからの憧れでもありました。自分でつかうシンセを自作すると、間違いなく楽しいですから。そんなふうにして「GNU/Linux向けチップチューンプラグインあんまりない」を「ない」と読み替えることで、念願のVSTプラグイン自作を、ちょうどやりたい音楽であるチップチューンをやるために「しかたなく」挑戦する理由としたわけです。</p>
+<p>ちなみに、これまた有名なチップチューンシンセに<a href="https://github.com/m-masaki72/SANA_8BIT_VST">SANA 8BIT VST</a>というファミコン音源があり (いいプラグインです)、ソースコードが公開されているのでPRをだすなりフォークするなりしてGNU/Linuxに対応させるのも可能だったでしょう。でも、つくりたかったのでつくりました。</p>
+<p>動機としてはそんなところですがつくりはじめる直接的なきっかけもありまして、それはRustのクレート (ライブラリのこと) に<a href="https://github.com/RustAudio/vst3-sys">vst3-sys</a>というのがあるのを知ったことです。これの何が嬉しいかというと、</p>
+<ul>
+<li>RustでVST3プラグインを書ける
+<ul>
+<li>Rustはいい言語なので好き</li>
+<li>C++こわい</li>
+</ul>
+</li>
+<li>VST3 SDKを入れることなしにVST3プラグインをビルドできる
+<ul>
+<li>VST3 SDKを得るのにメールアドレス登録その他めんどうなことをしなくてよくなる</li>
+<li>このへんのしくみは<a href="./2021-12-04_vst3-plugin-in-rust.html">『RustでつくるVST3プラグイン』</a>に書いてあるので参照ください</li>
+</ul>
+</li>
+</ul>
+<p>というあたりがうれしいところでした。</p>
+<p>こんなの (vst3-sys) 見ちゃったらなにかつくりたくなるじゃない、と思ってアイデアを考えたところちょうどチップチューンVSTがほしくて、かつチップチューンシンセは作りが単純そうで難易度的にも丁度よかろうということでSoyBoy SPの開発をスタートしたのでした。</p>
+<h2>利用したもの</h2>
+<p>SoyBoy SPをつくるのに主に以下のRustライブラリを利用しました。</p>
+<ul>
+<li><a href="https://github.com/RustAudio/vst3-sys">vst3-sys</a></li>
+<li><a href="https://github.com/emilk/egui">egui</a> </li>
+<li><a href="https://github.com/bincode-org/bincode">bincode</a></li>
+</ul>
+<p>vst3-sysはVST3のプラグインインターフェースを提供するライブラリですが、VST3のプラグインインターフェースはあの<a href="https://docs.microsoft.com/ja-jp/windows/win32/com/component-object-model--com--portal">COM (Component Object Model)</a>ベースなのでCOMのライブラリをvst3-comとして内包しています。</p>
+<p>eguiは「即時モードGUI」を提供するGUIライブラリです。GUIに関しては<a href="https://github.com/redox-os/orbtk">OrbTk</a> (Redox OS生まれのGUIライブラリ) かeguiかで悩んだんですが、そのときeguiのほうが興味が強かったためそちらにしました。この決断はたまたま正しかったようで、VST3プラグインのGUI用途に限れば、OrbTkは仕組み上まだ利用できなさそうでした。このあたりは後述します。</p>
+<p>bincodeは、VST3のプラグイン状態をシリアライズ・デシリアライズするのに利用しました。DAWで曲をつくっているときVSTプラグインの設定が保存されないと地獄ですが、これを実現するため内部状態をVST3規格所定のストリームに読み書きできる必要があったのです。機能から想像がつきますが、裏にはもちろんあの<a href="https://serde.rs">serde</a>がいます。</p>
+<h2>開発の過程</h2>
+<p>ざっくり開発がどんなだったか要点を絞って振り返ってみます。</p>
+<h3>最初のすがた: ゲームボーイ厳密再現 (頓挫)</h3>
+<p>これが<a href="https://github.com/t-sin/soyboy-sp.vst3/commit/ad6192dfd16f62e7cd13fac02a5f6de05c792495">最初のコミット</a>です。リポジトリをつくったのは2020年10月だそうです。コミット履歴をここから見ていくと、どうもこのころは厳密にゲームボーイの音源とAPU (Audio Processing Unit; サウンドチップ制御用CPU) を再現しようとしてたようで、ゲームボーイエミュレータのサウンドまわり仕様書とすごくにらめっこしてた記憶がたしかにあります。</p>
+<p>ただこれ、音がいつまでも出ないのでモチベーションの維持がだんだん難しくなっていきます。さらに途中で「APUを再現したいんじゃなくてGB的な音がでるシンセが本当はほしかったのでは？」と気付いちゃったため、頓挫というかいったんストップしました。</p>
+<h3>再スタート: 厳密には再現しない方針</h3>
+<p>そして2021年1月に作業を再開します。ちょっと間が開いてますが別のプログラミングプロジェクトでもやってたんですかね。</p>
+<p>さて、APU再現路線を諦めて簡単な構造でゲームボーイ音源にアプローチすることにしたとき、まず最初にやったのはシンセとしての構造設計です。SoyBoy SP (当時はgbi (GameBoy instrumentという名前でしたが) にどんな要素があって、どのように影響するのかをざくっと図にしました。</p>
+<ul>
+<li><a href="https://github.com/t-sin/soyboy-sp.vst3/blob/master/design/module-archtecture.png">SoyBoy SPのブロック図</a></li>
+</ul>
+<p>これで仕様が定まり開発可能になりました。あとは<a href="https://github.com/RustAudio/vst3-sys/blob/master/examples/again/src/lib.rs">vst3-sysのサンプルコード</a>を真似しながら、ひたすら実装していきます。詳細は書きませんが、音のHello Worldであるところのサイン波鳴らしをし、VST3ホスト (プラグインのホストのことで、たいていはDAW) からのイベントを受けて音のオンオフ等を実装し、DAWからのパラメータ変更をできるようにVST3のことばでやりとりをし、とここまででDAWで操作可能な最小の「シンセサイザー」ができあがります。だいたいそのあたりのスクショ動画があったので貼っておきます。</p>
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">soyboy-spの今日やった:<br><br>- ボリュームがUI上dBで操作できるようになった<br>- ボリュームノブはしかも対数スケール<br><br>明日やる:<br><br>- 矩形波オシレータのデューティ比を指定できるように<br>- MasterVolumeのデシベル値をちゃんと音処理部で扱うように<br>- パラメータ情報をvst3側でなくsoyboy側に寄せる <a href="https://t.co/DSOu6xIAcb">pic.twitter.com/DSOu6xIAcb</a></p>&mdash; t-sin@bak-shaver (@sin_clav) <a href="https://twitter.com/sin_clav/status/1458462345395466247?ref_src=twsrc%5Etfw">November 10, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>VST3ホストはパラメータを持つけど自前GUIを持たないプラグインを操作するためのUIを提供しています (してない場合もあるかも)。そのUIを使ってシンセサイザーのパラメータを編集しているのがこの動画です。わりとそれっぽく動いていますね。あとはシンセサイザー部分を作り込んでいけば、とりあえず操作可能なものができあがります。</p>
+<h3>GUIの実装</h3>
+<h4>背景</h4>
+<p>そんなわけで自前GUIがないどとりあえず操作可能なプラグインを実装することができました。SoyBoy SPはゲームボーイの音源をなんとなく再現することを目標としていますが、実はVST3ホストの提供するUIではすごく操作しづらいパラメータが存在します。それは波形テーブルの値です。</p>
+<p>波形テーブル音源は信号の値をテーブルに持っておき、それを読み取って出力する方式です。詳細な説明は<a href="https://ja.wikipedia.org/wiki/%E6%B3%A2%E5%BD%A2%E3%83%A1%E3%83%A2%E3%83%AA_(%E9%9B%BB%E5%AD%90%E9%9F%B3%E6%BA%90%E3%81%AE%E5%90%88%E6%88%90%E6%96%B9%E5%BC%8F">波形メモリ (電子音源の合成方式) - Wikipedia</a>などを参照していただきたいですが、ゲームボーイの波形テーブル音源は以下のような仕様です:</p>
+<ul>
+<li>テーブルの各値は4bit値</li>
+<li>テーブルの長さは32</li>
+<li>テーブルには波形1周期分の値が入っている</li>
+</ul>
+<p>以下のスクショの左下にあるのが実際のSoyBoy SPのGUIにある波形テーブルのエディタです。</p>
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">チップチューンシンセのSoyBoy SPがv0.9.0になりました。GUIが激重なのを最適化し、プリセットファイルへの書き出し・読み込みが壊れてたのを直し（ついでに波形テーブルも復元可能に）、プリセット読み込み時パラメータがGUIに即時反映されます。<br>そろそろ公開できそう。<a href="https://twitter.com/hashtag/soyboy?src=hash&amp;ref_src=twsrc%5Etfw">#soyboy</a> <a href="https://twitter.com/hashtag/chiptune?src=hash&amp;ref_src=twsrc%5Etfw">#chiptune</a> <a href="https://twitter.com/hashtag/vst3?src=hash&amp;ref_src=twsrc%5Etfw">#vst3</a> <a href="https://t.co/lUW8ZMOkwX">pic.twitter.com/lUW8ZMOkwX</a></p>&mdash; t-sin@bak-shaver (@sin_clav) <a href="https://twitter.com/sin_clav/status/1525367700402253824?ref_src=twsrc%5Etfw">May 14, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>たしかに32個の棒 (テーブルの値) があり、なんか離散値が入ってそうな感じがあります。VST3のしくみで通常用意できる「パラメータ」は0.0 ~ 1.0のf64値です。もしVST3のホスト提供UIでテーブルの値を編集するにはテーブル中の位置とその位置の値とを同時に指定する必要があります。あるいは<a href="https://twitter.com/sin_clav/status/1461326746335453184">値の数だけのパラメータを用意</a>する…？？</p>
+<p>いずれにしてもめんどいですね。それこそ例として出したテーブルエディタがほしくなります。そしてこれこそがGUI実装にちゃんと取り組む正当なほうのモチベーションでした。邪なほうのモチベーションはOrbTkとかeguiとかを使ってウハウハしたかっただけです。</p>
+<h4>ライブラリ選定</h4>
+<p>まずはGUIのモックをつくって (<a href="https://github.com/t-sin/soyboy-sp.vst3/blob/master/design/soyboy-ui-mock.png">モック画像</a>)、それからライブラリの選定に入ります。使ってみたかったOrbTkやeguiがVST3のGUIを実装するのに使えるか、できない場合ほかのGUIライブラリ (icedやconrod) はどうなのか、などなど調べる必要がありました。</p>
+<p>VST3において自前GUIを用意する場合、以下の要件を満たすライブラリである必要があります。</p>
+<ol>
+<li>ウィンドウのハンドルというかIDはVST3ホストが指定するものを使うこと
+<ul>
+<li>VST3のAPIの<a href="https://steinbergmedia.github.io/vst3_doc/base/classSteinberg_1_1IPlugView.html#a9fbc345c1e87f7e6210a8a49fdb96793"><code>IPlugView::attached()</code></a>を実装する必要がある</li>
+<li><code>IPlugView::attached()</code>の引数の<code>*parent</code>はプラットフォームで異なり、<a href="https://steinbergmedia.github.io/vst3_doc/base/group__platformUIType.html">UNIXではXEmbedのウィンドウID</a></li>
+</ul>
+</li>
+<li>ウィンドウのイベントループは自前でスレッドなり立てること
+<ul>
+<li><code>IPlugView::attached()</code>はGUI起動後即座に終了せねばならない</li>
+</ul>
+</li>
+</ol>
+<p>2は、<a href="https://github.com/rust-windowing/winit">RustのGUIウィンドウ抽象化ライブラリwinit</a>で「メインスレッド以外でイベントループを実行」的なオプションを利用できるライブラリならなんとかなります。問題は1でした。winitがそもそもこれに対応してないのです。RustでVSTプラグイン (VST2も含む) をつくろうとしてこの点は必ず突き当たる問題らしく、Windows向けとかでは対応がされているようでした。でもUNIXは未対応です。</p>
+<p>そこでUNIX向けに対応を行ってみて、GUI実装実験実施当時やりたい欲が高まっていたeguiを使ってみたところ、うまくうごきました。なのでそれを<a href="https://github.com/rust-windowing/winit/pull/2246">PRを出し</a>、それがマージされるまで待つのはつらいのでwinitに依存するライブラリをすべて一時的にフォーク (<a href="https://github.com/t-sin/winit/tree/with-parent-window-in-x11">winit</a>, <a href="https://github.com/t-sin/glutin">glutin</a>, <a href="https://github.com/t-sin/egui">egui</a>) してつかってます。ちなみにeguiは<a href="https://en.wikipedia.org/wiki/Immediate_mode_GUI">即時モードGUI</a>というタイプのGUIライブラリですが、SoyBoyのGUIは即時モードでなければならないわけではないです。即時モードGUIを単に体験したかっただけです。</p>
+<p>winitに出したPRはまだマージされてませんがいくつか理由がありまして、X11のメンテナがいない問題 (メンテナの方がいってた) と、ウィンドウまわり詳しそうなコントリビュータの方に改善の指摘をもらっててまだ完成してなかったり、とりあえずいったん動いてるのでSoyBoyを進めまくってて放置してたり、といったかんじです。そろそろPRのメンテしないと……。</p>
+<p>ちなみにOrbTkは先に挙げた1の条件を満たすことが現状できないため、そもそもVST3のGUIには使えないことが後から発覚したりしました。理由はバックエンドにSDL2を使っているからで、SDL2は<a href="https://wiki.libsdl.org/SDL_CreateWindowFrom?highlight=%28%5CbCategoryAPI%5Cb%29%7C%28SDLFunctionTemplate%29">ウィンドウIDを指定して (つまり既存ウィンドウから) ウィンドウをつくること自体はできます</a>が、そうすると<a href="https://discourse.libsdl.org/t/sdl-createwindowfrom-with-opengl/19737/10">OpenGLの描画コンテキストを既存ウィンドウに結び付ける操作ができないため、SDLによるOpenGL描画が行えない</a>のです。OrbTkは当時確認したときはSDL2をバックエンドにしており、eguiのSDL2バックエンドも同様ですが、これらOpenGLによる描画をするGUIライブラリはバックエンドがSDL2で実現されているとVST3のGUIにはつかえないのです。<a href="https://twitter.com/sin_clav/status/1511700619744055304">このツイート</a>がそのあたりを調べてたころのつぶやきです。この調査によってwinitに手を入れることにして、上に述べたようなPRをつくり、今に至ります。</p>
+<h4>実装時のたいへんだった点</h4>
+<p>VST3の自前GUIは、GUIプログラミングがはじめてだったためというのもあり、苦難の連続でした。以下にたいへんだったポイントを挙げます。</p>
+<ul>
+<li>GUIは別スレッド</li>
+<li>GUIの表示とパラメータの同期は自前スレッド間通信</li>
+<li>(GUIでなく) VST3の信号処理部とパラメータ処理部の通信も実はスレッド間通信</li>
+<li>オーディオスレッドでメモリ確保とスレッド間通信をしてはいけない</li>
+<li>当たり判定ずれてた問題</li>
+<li>そもそもGUIを実装すること自体がたいへん問題</li>
+</ul>
+<h5>GUIは別スレッド</h5>
+<p>VST3のプラグインは通常2つのスレッドによって動いています。音声信号を計算 (<a href="https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IAudioProcessor.html#a6b98eb31cf38ba96a28b303c13c64e13"><code>IAudioProcessor::process()</code></a>を実行) するオーディオスレッドと、UIスレッド (VST3ホスト側のUIのことです) です。どちらもVST3が生成し、適切なタイミングでプラグインの各種インターフェースを呼んでプラグインを動かします。どちらのスレッドもVST3が生成するので、プラグイン実装者が止めたりするとホストを全体的に殺すこともあります。なのでGUIのイベントループを動かすときは自分でスレッドを用意する必要がでてきます。</p>
+<p>以降のたいへんポイントは、オーディオスレッドともUIスレッドとも別に自前GUIスレッドを用意したことによるつらみ、と言い換えてもいいでしょう。</p>
+<h5>GUIの表示とパラメータの同期は自前スレッド間通信</h5>
+<p>あたりまえですが、スレッドが別である以上状態の動機にはスレッド間の通信が必要になります。ただGUIを実装しても、GUI上のパラメータ変更はプラグインの内部状態を変更しません。そして、VST3ではプラグインは信号処理部 (<a href="https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IAudioProcessor.html"><code>IAudioProcessor</code></a>) と制御部 (<a href="https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IEditController.html"><code>IEditController</code></a>) に分かれており、この2パート間の同期にはVST3ホストを介して行います。それがなに意味するかというと、GUIから信号処理部 (シンセのコアを持っている) へパラメータ変更を伝達するには、以下の手順を踏む必要があります。</p>
+<ol>
+<li>GUIスレッドからUIスレッドを介して<code>IEditController</code>に変更を伝達</li>
+<li><code>IEditController</code>への変更は<code>IAudioProcessor</code>のキューへUIスレッドが投げる</li>
+<li><code>IAudioProcessor::process()</code>でパラメータ変更を受け取って、シンセのコアに設定する</li>
+</ol>
+<p>これを理解するまでかなりぐぬぬっておりました。しかもf64の0.0 ~ 1.0のパラメータについてだけ2をVST3ホストが自動でやってくれるのですが、波形テーブル編集イベントのように自前メッセージを飛ばす必要がある場合、2も自前です。VST3ホストを介してバイナリデータを投げたり受け取ったりすることになります。わーお。</p>
+<h5>VST3の信号処理部とパラメータ処理部の通信も実はスレッド間通信</h5>
+<p>ぼくははじめ、スレッドセーフさが皆無な<code>std::cell::RefCell</code>でなんでも状態を保持していました。でもパラメータ変更の伝達手順の2もじつはスレッド間通信なので、スレッドセーフなデータ構造を使っていないと動作は保証されません。コードでいうと<a href="https://github.com/t-sin/soyboy-sp.vst3/blob/f828fa566a09d3586232f66da73d7c6686774daf/src/vst3/plugin.rs#L31">スレッドセーフでない信号処理部の構造体がこう</a>であり、他スレッドから触るスロットは<code>std::sync::Mutex</code>などにしたのが<a href="https://github.com/t-sin/soyboy-sp.vst3/blob/9b94e3fa4c71531c4fc330f1f545594cd5894ace/src/vst3/plugin.rs#L127">最新の信号処理部構造体</a>です。</p>
+<p>無保証なので、保証はないながら正しく動いてたのがまた怖いですね。GUIスレッドのほうはMutexやArc等を用いて書いてましたが、プラグイン開発の最初期のコード (vst3-sysのサンプルを写して書いた) はスレッドを跨がなかったのでRefCellでした。そのまま膨らませていったところスレッドセーフティが必要になった場面を見事見逃したのでした。ああこわい。</p>
+<h5>オーディオスレッドでメモリ確保とスレッド間通信をしてはいけない</h5>
+<p>音声信号処理のプログラムはパフォーマンスに非常にシビアです。オーディオスレッドはVST3ホストの設定によりますが1秒の音信号を計算するためにだいたい44100回サンプルを計算しつづけます。たいていバッファされているので<code>IAudioProcessor::process()</code>内でバッファ長分サンプルを計算し、<code>IAudioProcessor::process()</code>を呼ぶタイミングはホストが決めているわけです。DAWとかでもっと高いサンプリング周波数に設定していたら、もっと計算量が増えることになります。</p>
+<p>こんなところでメモリ確保とスレッド間通信 with ロックをキメてはいけません。反省。</p>
+<p>ぼくのマシン (Ryzen 7のデスクトップ機でもThinkPad X1 Carbonなラップトップ機でも) ではたまたま問題ありませんでしたが (CPU使用率は多めになってたかもしれない) 、さまざまな環境で動くものなのでこれはリリースの前に解消しておきました。</p>
+<h5>当たり判定ずれてた問題</h5>
+<p>なんかGUI、重いなって感じてた時期がありました。マウスのクリックに反応しないときがあり、なんだかマウスをクリックするときに力をこめると反応がよくなる……ような気がしたりしていて、egui自体が重いのかとか考えて調査をしていたのです。</p>
+<p>ふと<a href="https://github.com/t-sin/soyboy-sp.vst3/issues/4">当たり判定を表示してみたところ</a>、ちょうど半分、下に当たり判定がズレていました。人間はUIが上半分だけ反応しないと「GUIが重い」と認識するんですね。これは長いことハマっていた問題だったんですが、解決したときには妙に納得しました。</p>
+<p>GUIを実装するときは当たり判定をすぐ表示できるようにしておいたほうがよいです。</p>
+<h5>そもそもGUIを実装すること自体がたいへん問題</h5>
+<p>と、ここまで挙げた問題だけでもなかなか大変でしたが、そもそもGUIのパーツ類を実装して組み上げていくのはすごく大変でした。当たり判定の問題しかり、状態の正しい変更および伝達、というかGUIの設定がゲームボーイすぎて既存のパーツがまったく使えないのでぜんぶ実装、というところ。</p>
+<p>ほんとうはv0.9.9からv1.0.0にするときに、ゲームボーイの電源投入時のように<code>Tantendo</code>ロゴが降りてきてピ↓ローン↑ってなる隠しコマンドを実装しようと思ってすこし実装していたのですが、これを入れることでGUIがめたくそに壊れたら悲しくなるので見送ってしまいました。</p>
+<p>ReactとかVueとか、Webのフロントエンド界隈にはGUIをステートレスに記述するフレームワークがありますが、あれらが便利であることを痛感しました。そうか……eguiの上に自作Reactライクなサムシングを……？</p>
+<p>余談ですが、<a href="https://github.com/carrotflakes">@carrotflakes</a>さんにv0.6.xくらいのときに試してもらったらGUI立ち上げるとガクガク激重になると言われ、しかし手元では再現しなかったため perf (Ubuntu) や VerySleepy (Windows) といったプロファイラを使ってボトルネック調査をして見事改善したのはいい経験になりました。OSやアーキテクチャ、あとVST3プラグインの場合はVST3ホストを複数動作確認しておいたほうがよい、という学びを得ました。あとプロファイリング、超だいじ。</p>
+<h3>開発過程で生まれたRust界への貢献</h3>
+<p>Rustでのソフトウェア開発はこれで2回目なのですが (1回目は<a href="https://github.com/t-sin/koto">Koto</a>で、どんなものかは<a href="https://github.com/t-sin/shinchoku-advent-calendar-2020/blob/master/articles/2020-12-01.md">Koto - ファイルシステムをシンセサイザーにする</a>に書いてます) 、そのときは依存ライブラリが多くなかった上けっこう安定していたので、Kotoで閉じた開発をしていました。SoyBoy SPのほうではvst3-sysというまだ未発達なライブラリを使っていたためか、いくつかの貢献を生むことができました。以下のような感じです。</p>
+<ol>
+<li>MERGED: <a href="https://github.com/RustAudio/vst3-sys/pull/40">vst3-sys: 一部型にCloneとCopyをつけた</a></li>
+<li>MERGED: <a href="https://github.com/RustAudio/vst3-sys/pull/41">vst3-sys: ベロシティ (音の強さ) の型がVST3 SDKと違ってたので修正</a></li>
+<li>MERGED: <a href="https://github.com/RustAudio/vst3-sys/pull/49">vst3-sys: VST3 SDKのアロケーションメソッドの型が違ってたので修正</a></li>
+<li>WIP: <a href="https://github.com/rust-windowing/winit/pull/2246">GUIウィンドウ関連抽象化ライブラリwinitで、UNIX向けに子ウィンドウを実装</a></li>
+</ol>
+<p>4はGUIのところで述べたPRです。3は使わないときは使わなさそう (GUIとかでカスタムなパラメータが必要になってくる要りそう) なのでわかるのですが、2はキーボードでキーを押す強さ (=速さ) の型が間違っていたことに対する修正でしたが、わりと基本的な機能なので「もしや……vst3-sysってまだだれもつかってない……？」と思った瞬間でもありました。実際にはユーザはいるっぽいですが。</p>
+<h3>リリース</h3>
+<p>さて、当初想定した機能をすべて実装して不具合も解消できたら、やることはリリースです。開発当初はGNU/Linuxだけで動けばいいと考えていたので頒布を考えてなかったのですが、Windowsでもほぼそのままでビルドできて動くとわかると使ってもらいたくなりました。今回は後述の事情もあって、BOOTHで<a href="https://bak-shaver.booth.pm/items/3914414">無料頒布</a>と<a href="https://bak-shaver.booth.pm/items/3871410">有料頒布 (500円)</a>を同時に行っています。</p>
+<p>リリース、というか頒布と価格設定に当たってはけっこう悩んだので (そしてそれをわすれて頒布開始しグダったので) 、ここに備忘録として記しておきます。<strong>次回作以降の頒布の前にここを読み返したまえ to 自分</strong>。</p>
+<h4>頒布形態についての悩み</h4>
+<p>頒布時の形態と価格についてはずっと悩んでいました。そのあたりを特に深く考えるようになったのは、2021年5月20日ごろにみた音源開発者の方の引退記事だったと記憶しています。ちょっとその記事じたいが出てこないのですが (リツイートかfavかをした気がしますが、それらは検索不能) 以下のようにかなりショックを受けていました。</p>
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">うー。音源・ソフトウェアシンセ・エフェクト界隈でつらい話を見てしまった…。ううう……</p>&mdash; t-sin@bak-shaver (@sin_clav) <a href="https://twitter.com/sin_clav/status/1395366687893905410?ref_src=twsrc%5Etfw">May 20, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">VST、GNU/Linux向けってほんとにすこししかないので「なければつくるの挑戦するしかないの……？？ そこはオープンソースで……？？？」になっちゃいがちなんだけど、万が一いいものができちゃったとして、GPLだろうがMITだろうが無料配布だと価格を破壊しにいくことになりそうだよな…。</p>&mdash; t-sin@bak-shaver (@sin_clav) <a href="https://twitter.com/sin_clav/status/1395369965721583623?ref_src=twsrc%5Etfw">May 20, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>ぼくが大学生くらいのころからアマチュアDTMerが「無料のVSTプラグイン」「無料のサウンドフォント」を収集することは一般的だったように思います。DAWもってなかったけど、無料のプラグインを英語をかいぐぐりながらダウンロードした記憶がぼくにもあります。有料のプラグインを販売している会社がキャンペーンとして無料にしたり、販促用に無料のプラグインをつくって公開していたり、ということもあります。</p>
+<p>しかし無料のプラグインがこれだけ溢れているなか、個人でVSTのプラグインであったりサンプル音源であったりを販売することで生計を立てようとしている方々にとって、これらはどう影響するでしょうか。趣味の成果物や習作を無料で公開することによって、つまり相応の対価が発生するような成果物を無料で公開して価格破壊することによって、そのような人たちの食い扶持を奪うことになっていないか。その点が引退の記事を読んで感じたことです。</p>
+<h4>2022年5月頭のころの考え</h4>
+<p>以上の流れがあり、v1.0.0への道のりが近くなってきた2022年5月頭ごろから頒布の形態について考え、結果以下のような結論をだしました。</p>
+<ul>
+<li>ソースコードはGPLv3で公開する
+<ul>
+<li>VST3 SDKの利用規約によって、個人作成のVST3プラグインのライセンスはたいていGPLv3になる</li>
+<li>ぼくとしてもGPLv3でよいと思っているのでここはヨシ</li>
+</ul>
+</li>
+<li>ぼくによるオフィシャルなバイナリ頒布は有料で行う
+<ul>
+<li>お値段は感覚がよくわからないけどまあ千円札単位くらいでいいのでは</li>
+<li>価格破壊はしない意思を示すため多少高めでもよい</li>
+<li>頒布にはBOOTHをつかう</li>
+</ul>
+</li>
+<li>バイナリ頒布はWindowsのみ
+<ul>
+<li>環境差異がすくなそうなので</li>
+<li>GNU/Linuxでのバイナリ頒布、libcのバージョンとかいろいろあって大変そう</li>
+<li>macは持ってないからPRとか待ち</li>
+</ul>
+</li>
+<li>自前ビルドは手軽できるようREADMEに書いたりビルドスクリプトを整えておく</li>
+</ul>
+<p>これであとは価格そのものを確定させてしまえばあとは頒布準備が整えばGOするつもりでした。</p>
+<h4>リリース時のぐだぐだ</h4>
+<p>そういうことを考えていたことを、v1.0.0のタグを切った瞬間にはすっかり忘れてしまっていました。単に「1000円以上にする」だけが頭に残っており、v1.0.0ができたときにはその高揚感のままに「1500円って高すぎないかな」などと不安がっていました。メモってだいじですね。</p>
+<p>結局頒布をした瞬間には、1500円でのWindows版有料頒布ページのみをつくって公開としました。ただ、このあとすごくブレブレします。熟慮を忘却した状態でリリースをしたものだから、なにかの切っ掛けで「1500円は高すぎるのでは」「無料版を用意し、BOOTHのブースト機能を以ってお布施とするべきでは」とか迷いはじめます。で、この時点で購入者が一人もいなかったため有料版を非公開にし、無料版の頒布ページを公開しました。で、知人に無料版を展開したら「無料版でブーストしようとしたらブースト自体なかったよ」とおしえてもらい、「じゃあお布施版を再公開するか」と有料版を再度公開しました。値段はブーストあるから1500円でなくていいかと500円に変更しました。これが深夜1時のリリースから14時間くらいまでのできごとです。ブレブレですね。</p>
+<p>そしてその夜にはじめて、ここに書いた過去の頒布についての悩みと決定を思い出すわけです。そのときのがっくり感といったらなかった。あれだけ熟慮をしていたのに、いざ公開となったときには忘れ、ぐだぐだな動きをかまし、信念と真逆なことをしてしまった。</p>
+<p>次回作では信念に則った行動をするぞという自戒を込めて、ここにぐだぐだを記しておくこととします。</p>
+<h2>おわりに</h2>
+<p>というわけで、リポジトリができてから1年半、再スタートしてからだと1年かけて試行錯誤しながら開発してきたVST3プラグインを無事v1.0.0リリース &amp; 頒布開始することができました。長かった。</p>
+<p>反省点を挙げるとすれば次のような感じでしょうか:</p>
+<ul>
+<li>v1.0.0公開時にぐだったこと</li>
+<li>厳密に再現はインクリメンタルに開発できるようよく考えて進めること (<a href="./2021-09-10-c-lesson-02.html">c-lessonでの学び</a>です)</li>
+<li>GUI自体は即時モードの必要がないためじつは他のGUIライブラリだともうちょっと楽だったかもしれないこと</li>
+<li>GUIに用いる画像について、元データと実ファイルの生成は自動化できればそれがよかったこと</li>
+<li>GUIコードには画面上の位置などマジックナンバーまみれになっていてあまり綺麗ではないこと</li>
+</ul>
+<p>とはいえ良かった点のほうが多かったです:</p>
+<ul>
+<li>人生初のVST3プラグインを完成させた (しかもGUIつきで)</li>
+<li>自分にも他人にも有用なナイスなものをつくった</li>
+<li>開発当初に想定したすべての機能を実装し、v1.0.0にできた (実は初？)</li>
+<li>プラグインの機能に沿ったナイスなGUIを設計できた</li>
+<li>Kotoよりもディープに並行処理したので気をつけるべきポイントを覚えた</li>
+<li>Rustのマクロ (<code>macro_rules!</code>) を覚えた</li>
+<li>生GUIパーツ実装によりGUIプログラミングに親しめた</li>
+<li>プロファイラによるパフォーマンスチューニングを体験できた</li>
+</ul>
+<p>RustでVST3開発する詳しい解説は同人誌にしたためて技術書典にて頒布したいなぁと考えています。ぶ厚くならなければいいな。まずそのためにはサンプルプロジェクトとして簡単なVST3プラグインを設計して実装しておかねばならぬと思っているのですが。出せるかなあ。出せるといいなあ。</p>
+
+</article>
+
+
+      <div id="page-info">
+        <p>
+開発していたRust製のチップチューン用VST3プラグイン、SoyBoy SPが無事v1.0.0になり頒布開始できました。この記事ではSoyBoyの紹介と開発の苦労話などを記しています。
+</p>
+        
+        <p>
+          タグ:
+          
+          <a href="プログラミング.html">プログラミング</a>
+          ,
+          
+          <a href="Rust.html">Rust</a>
+          ,
+          
+          <a href="音楽.html">音楽</a>
+          ,
+          
+          <a href="デジタル信号処理.html">デジタル信号処理</a>
+          ,
+          
+          <a href="サウンドプログラミング.html">サウンドプログラミング</a>
+          ,
+          
+          <a href="VST3.html">VST3</a>
+          
+          
+        </p>
+        
+        <p>作成日時: 2022-06-10T00:53:20.662485+09:00</p>
+        <p>更新日時: -</p>
+      </div>
+
+      
+<nav>
+  <div class="article-nav nav-left">
+    <p class="nav-label">1つ新しい記事</p>
+    
+    <a href="2022-02-22_c-lesson-03.html">C言語の勉強: バイナリ・アセンブリを通してみるC言語編 (それとJITコンパイル)</a>
+    
+  </div>
+
+  <div class="article-nav nav-right">
+    <p class="nav-label">1つ古い記事</p>
+    
+    -
+    
+  </div>
+</nav>
+
+    </div>
+
+    <footer>
+      <hr>
+      <p><a href="https://github.com/t-sin/t-sin.github.io">Here is the source code of this site.</a></p>
+    </footer>
+  </body>
+</html>
