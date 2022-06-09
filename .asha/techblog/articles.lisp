@@ -6,6 +6,13 @@
    :TAG-TEMPLATE-NAME "techblog.tag-template"
    :INDEX-TEMPLATE-NAME "techblog.index-template"
    :ARTICLES (#S(ASHA.WEBSITE:CONTENT
+                 :NAME "2022-06-10_soyboy-sp-released"
+                 :TEMPLATE-NAME NIL
+                 :CREATED-AT "2022-06-10T00:53:20.662485+09:00"
+                 :UPDATED-AT ""
+                 :PATHSTR "techblog/2022-06-10_soyboy-sp-released.md"
+                 :TAGS ("プログラミング" "Rust" "音楽" "デジタル信号処理" "サウンドプログラミング" "VST3"))
+              #S(ASHA.WEBSITE:CONTENT
                  :NAME "2022-02-22_c-lesson-03"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2022-02-22T15:57:03.428471+09:00"
