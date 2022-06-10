@@ -173,7 +173,7 @@
 <p>VST3のプラグインは通常2つのスレッドによって動いています。音声信号を計算 (<a href="https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IAudioProcessor.html#a6b98eb31cf38ba96a28b303c13c64e13"><code>IAudioProcessor::process()</code></a>を実行) するオーディオスレッドと、UIスレッド (VST3ホスト側のUIのことです) です。どちらもVST3が生成し、適切なタイミングでプラグインの各種インターフェースを呼んでプラグインを動かします。どちらのスレッドもVST3が生成するので、プラグイン実装者が止めたりするとホストを全体的に殺すこともあります。なのでGUIのイベントループを動かすときは自分でスレッドを用意する必要がでてきます。</p>
 <p>以降のたいへんポイントは、オーディオスレッドともUIスレッドとも別に自前GUIスレッドを用意したことによるつらみ、と言い換えてもいいでしょう。</p>
 <h5>GUIの表示とパラメータの同期は自前スレッド間通信</h5>
-<p>あたりまえですが、スレッドが別である以上状態の動機にはスレッド間の通信が必要になります。ただGUIを実装しても、GUI上のパラメータ変更はプラグインの内部状態を変更しません。そして、VST3ではプラグインは信号処理部 (<a href="https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IAudioProcessor.html"><code>IAudioProcessor</code></a>) と制御部 (<a href="https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IEditController.html"><code>IEditController</code></a>) に分かれており、この2パート間の同期にはVST3ホストを介して行います。それがなに意味するかというと、GUIから信号処理部 (シンセのコアを持っている) へパラメータ変更を伝達するには、以下の手順を踏む必要があります。</p>
+<p>あたりまえですが、スレッドが別である以上状態の同期にはスレッド間の通信が必要になります。ただGUIを実装しても、GUI上のパラメータ変更はプラグインの内部状態を変更しません。そして、VST3ではプラグインは信号処理部 (<a href="https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IAudioProcessor.html"><code>IAudioProcessor</code></a>) と制御部 (<a href="https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IEditController.html"><code>IEditController</code></a>) に分かれており、この2パート間の同期にはVST3ホストを介して行います。それがなに意味するかというと、GUIから信号処理部 (シンセのコアを持っている) へパラメータ変更を伝達するには、以下の手順を踏む必要があります。</p>
 <ol>
 <li>GUIスレッドからUIスレッドを介して<code>IEditController</code>に変更を伝達</li>
 <li><code>IEditController</code>への変更は<code>IAudioProcessor</code>のキューへUIスレッドが投げる</li>
