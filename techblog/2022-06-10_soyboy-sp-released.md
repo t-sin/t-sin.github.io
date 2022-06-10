@@ -158,7 +158,7 @@ VST3のプラグインは通常2つのスレッドによって動いています
 
 ##### GUIの表示とパラメータの同期は自前スレッド間通信
 
-あたりまえですが、スレッドが別である以上状態の動機にはスレッド間の通信が必要になります。ただGUIを実装しても、GUI上のパラメータ変更はプラグインの内部状態を変更しません。そして、VST3ではプラグインは信号処理部 ([`IAudioProcessor`](https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IAudioProcessor.html)) と制御部 ([`IEditController`](https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IEditController.html)) に分かれており、この2パート間の同期にはVST3ホストを介して行います。それがなに意味するかというと、GUIから信号処理部 (シンセのコアを持っている) へパラメータ変更を伝達するには、以下の手順を踏む必要があります。
+あたりまえですが、スレッドが別である以上状態の同期にはスレッド間の通信が必要になります。ただGUIを実装しても、GUI上のパラメータ変更はプラグインの内部状態を変更しません。そして、VST3ではプラグインは信号処理部 ([`IAudioProcessor`](https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IAudioProcessor.html)) と制御部 ([`IEditController`](https://steinbergmedia.github.io/vst3_doc/vstinterfaces/classSteinberg_1_1Vst_1_1IEditController.html)) に分かれており、この2パート間の同期にはVST3ホストを介して行います。それがなに意味するかというと、GUIから信号処理部 (シンセのコアを持っている) へパラメータ変更を伝達するには、以下の手順を踏む必要があります。
 
 1. GUIスレッドからUIスレッドを介して`IEditController`に変更を伝達
 2. `IEditController`への変更は`IAudioProcessor`のキューへUIスレッドが投げる
