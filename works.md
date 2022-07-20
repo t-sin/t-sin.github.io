@@ -37,16 +37,18 @@
 
 ### 実用できる系
 
-- [Niko](https://github.com/t-sin/niko) (Common Lisp)
-    - GitHubのissueやPR上でメンションをもらったときにSlackで通知してくれるSlack bot。
+- [Soyboy SP](https://github.com/t-sin/soyboy-sp.vst3) (Rust)
+    - チップチューン向けVST3プラグイン。
+    - [公式サイト](https://t-sin.github.io/soyboy-sp.vst3/)もあります。
+    - ビルド済みバイナリはBOOTHにて頒布中: [無料版](https://bak-shaver.booth.pm/items/3914414)、[お布施版](https://bak-shaver.booth.pm/items/3871410)
 - [Asha](https://github.com/t-sin/asha) (Common Lisp)
     - 静的サイトジェネレータ。
     - もともとは『3つのLisp 3つの世界』のためのコードサンプルだったが、ブログ移行のため本格改造中。
 - [Rosa](https://github.com/t-sin/rosa) (Common Lisp)
     - テキストデータにメタデータを付与する構文を与える言語。
     - パーサがついている。
-- [Soyboy SP](https://github.com/t-sin/soyboy-sp.vst3) (Rust)
-    - チップチューン向けVST3プラグイン。
+- [Niko](https://github.com/t-sin/niko) (Common Lisp)
+    - GitHubのissueやPR上でメンションをもらったときにSlackで通知してくれるSlack bot。
 
 ### メディア・インタラクティブ系
 
