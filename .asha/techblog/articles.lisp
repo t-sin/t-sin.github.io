@@ -6,6 +6,13 @@
    :TAG-TEMPLATE-NAME "techblog.tag-template"
    :INDEX-TEMPLATE-NAME "techblog.index-template"
    :ARTICLES (#S(ASHA.WEBSITE:CONTENT
+                 :NAME "2023-12-15_testing-framework-ethogram-in-progress-01"
+                 :TEMPLATE-NAME NIL
+                 :CREATED-AT "2023-12-16T22:27:35.089323+09:00"
+                 :UPDATED-AT ""
+                 :PATHSTR "techblog/2023-12-15_testing-framework-ethogram-in-progress-01.md"
+                 :TAGS ("プログラミング" "テスト駆動開発" "Lisp" "Common Lisp" "自作"))
+              #S(ASHA.WEBSITE:CONTENT
                  :NAME "2022-06-10_soyboy-sp-released"
                  :TEMPLATE-NAME NIL
                  :CREATED-AT "2022-06-10T00:53:20.662485+09:00"
