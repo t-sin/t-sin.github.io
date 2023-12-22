@@ -1,0 +1,405 @@
+<html>
+  <head prefix="og: http://ogp.me/ns#">
+    <meta charset="UTF-8">
+    <title>テストフレームワークをつくる決意をするまで: 後編 - 技術の記録 - Ibotenic</title>
+    <link href="/style.css" rel="stylesheet">
+
+    
+<link href="/markdown.css" rel="stylesheet">
+<link href="/techblog/style.css" rel="stylesheet">
+
+<meta name="og:url" content="https://t-sin.github.io/">
+<meta name="og:title" content="Ibotenic - diary - テストフレームワークをつくる決意をするまで: 後編">
+<!--meta name="og:image" content="https://www.itra.co.jp/uploads/media/2019/05/20190528171315_1.jpg"-->
+<meta name="og:description" content="
+テストフレームワークをつくっているのでその動機とか試行錯誤とか途中経過とかを書きます。長くなったので前後編に分け、これは後編です。
+">
+<meta name="og:type" content="article">
+
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/" class="website-title">Ibotenic</span>
+        <span class="website-by">by</span>
+        <span class="website-author">t-sin</span>
+      </h1>
+      <hr />
+      <nav>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/works.html">Works</a></li>
+          <li><a href="/techblog/">Tech Blog</a></li>
+          <li><a href="/diary/">Diary</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="content">
+      
+<h1>テストフレームワークをつくる決意をするまで: 後編</h1>
+<div class="article-info">
+  <p>
+    
+    <a class="tag" href="プログラミング.html">プログラミング</a>
+    
+    <a class="tag" href="テスト駆動開発.html">テスト駆動開発</a>
+    
+    <a class="tag" href="Lisp.html">Lisp</a>
+    
+    <a class="tag" href="Common Lisp.html">Common Lisp</a>
+    
+    <a class="tag" href="自作.html">自作</a>
+    
+  </p>
+  <p class="created-at">2023-12-22T20:22:05.715884+09:00</p>
+  <p class="description">
+テストフレームワークをつくっているのでその動機とか試行錯誤とか途中経過とかを書きます。長くなったので前後編に分け、これは後編です。
+</p>
+</div>
+
+<article>
+  <h2>Lispアドベントカレンダーの記事ですよ</h2>
+<p>この記事は<a href="https://adventar.org/calendars/9364">Lispアドベントカレンダー2023</a>の19日目の記事です。</p>
+<h2>はじめに</h2>
+<p>思うところがいくつかあり、Ethogramというテストフレームワークをつくっています。このEthogramをつくっていくなかで葛藤とか試行錯誤とかがあったのですが、話の種になりそうで読lみ物として楽しめそうな事柄があったために記事に起こしてみるとおもしろいのではないかなあ、じゃあ書いてみるか、というわけです。</p>
+<p>ところでこの記事は前後編の後編です。ここまでの流れをおさらいしてみましょう。</p>
+<h3>ここまでのあらすじ</h3>
+<p>2023年の5月ごろ、ふと思った。テストをしっかり書けば過去の頓挫リポジトリはもうちょっとマシなところまで進んだのではないか、と。</p>
+<p>既存のテストフレームワークを触った経験から、BDDがよいものであると知ったt-sinは、しかしその実装であるRubyのRSpecやGoのGinkgoにおぼえていた若干の不満が解消されたカッコよいテストフレームワークが生えてこないかなあと思うのであった。</p>
+<p>t-sin曰く、DSLがうまくつくられているとテストが読みやすくなると。</p>
+<p>またt-sin曰く、テストがうまく意味付けされているとテストが読みやすくなると。</p>
+<p>そして遥かなる「なんかすっきりしててわかりやすいテストフレームワーク」、つまり<strong>すっわか</strong>テストフレームワーク実現への壮大なる旅路が幕を開けたのであった（ちいかわおもしろいよね）。</p>
+<h2>テストフレームワークッ、つくってみる…ってコト！？</h2>
+<p>そんなわけでもにょもにょと考えて (<a href="2023-12-15_testing-framework-ethogram-in-progress-01.html">前編記事参照</a>) いたわけですが。ないならお試しでつくってみるといいのです。実験はしたいし、いいものになったらCommon Lispの世界が豊かになってぼくとしてもうれしい。</p>
+<p>そんなわけでつくりはじめたのが、Common Lisp用テストフレームワーク<a href="https://github.com/t-sin/ethogram"><em>Ethogram</em></a>です。</p>
+<p>ちなみにいまから述べるのは1番目の設計時の目標です。現在は目標が変わって2番目の設計で実装していますが、その変遷はすぐ後に書きますのでひとまずそのまま読んでください。</p>
+<p>1番目の設計のコードは<a href="https://github.com/t-sin/ethogram/releases/tag/first-design"><em>Ethogram</em>の<code>first-design</code>タグ</a>として最後のコミットをのこしています。</p>
+<h3>目標 (1番目)</h3>
+<p>と、いうわけで以下のような目標を立ててつくっていました。</p>
+<ol>
+<li>仕様を読みやすく書きたい　〜 ユニットテストでは不足である</li>
+<li>BDDスタイルのフレームワークほしい　〜 高級なフレームワークほしい</li>
+</ol>
+<p>ここから整理したやること・やらないことを列挙すると以下のような感じです。</p>
+<h4>やりたいこと (必須)</h4>
+<ul>
+<li>BDDの流儀をCommon Lispに持ち込む</li>
+<li>構造化されたテストを記述するDSL</li>
+<li>テストの意図や意味を明確にしたDSL</li>
+</ul>
+<h4>やりたいこと (将来)</h4>
+<ul>
+<li>いいかんじのexpectation/actualのdiff表示
+<ul>
+<li>RSpecとかほかのにはいいのがあるので</li>
+<li>Common Lispのdiffライブラリを調べてみつけた気はする</li>
+</ul>
+</li>
+<li>拡張可能なDSL
+<ul>
+<li>(テストのクラスを継承できるようにしたらんかいいのでは、しらぬけど)</li>
+</ul>
+</li>
+<li>REPLでのテストの(再)定義・実行・確認 (introspection)
+<ul>
+<li>まあせっかくREPLがあるのだから、くらいのノリで考えたがいつかどこかで</li>
+</ul>
+</li>
+</ul>
+<h4>やらないこと</h4>
+<p>やらないことについては事前調査をしっかりしており、ここは偉いと思いました。</p>
+<ul>
+<li>期待値を記述する方法 (RSpecの<a href="https://github.com/rspec/rspec-expectations">rspec-expectations</a>)
+<ul>
+<li><a href="https://github.com/40ants/cl-hamcrest">cl-hamcrest</a>というライブラリがひとまずその用を為してそうだった</li>
+</ul>
+</li>
+<li>関数とかをモックする方法
+<ul>
+<li>Common Lispでは、ユーザがなんでもできすぎていわゆるRSpecのようなモックがしづらいため</li>
+<li><em>システムの境界のみをモックすべき</em>と思っていたため (<a href="https://zenn.dev/cxxxr/articles/lisp-advent-calendar-2023-mock">Lispアドベントカレンダー2日目でcxxxrさんも書かれています</a>)</li>
+<li>既存でいくつかライブラリもあるようだった: (<a href="https://github.com/Ferada/cl-mock">cl-mock</a>, <a href="https://github.com/Chream/mockingbird">mockingbird</a>)</li>
+</ul>
+</li>
+<li>テストデータのテンプレート化ライブラリ (いわゆるfixtures; RSpecでいうと<a href="https://github.com/thoughtbot/factory_bot">factorybot</a>)
+<ul>
+<li>あるとけっこうよいが、使い方はかなりむずかしいと感じた</li>
+<li>factorybotでは複雑なfixtureを単純なfixtureの組み合わせで生成できるが、それが単純なfixtureへの依存を生み単純なfixtureを気軽に変更できなくなってしまうのを見たため
+<ul>
+<li>これどうしたらいいんだろうなあ、とか思った</li>
+<li>アプローチはいいとおもうけど、ある定義にほかの定義が依存しそれはテストから依存されている、という状況がよくなさそう</li>
+<li>あくまでもfixtureは生成時点の固定データとして別に自動生成・保存・利用され、その定義とは切り離すのがいいのかなぁ・…とかおもったりした
+<ul>
+<li>ORMのクラス定義と実際のスキーマファイルのように？</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>上記のように考えてたけど、いまやることじゃないなと思った</li>
+<li>ちなみに既存ライブラリはなさそうだった</li>
+</ul>
+</li>
+</ul>
+<h3>どんなDSLを考えていたか</h3>
+<p>以下のような感じのDSLを考えていました (当時のメモから抜粋)。</p>
+<p>テストをするとき、確認したいことはだいたい2つくらいに分類されそうだなと考えていました。純粋な関数の入出力についての確認、それと副作用についての確認です。</p>
+<p>1番目の<em>Ethogram</em>では、それらをとりあえず3つの「テスト」としてDSLに表現しました。</p>
+<p>すなわち、</p>
+<ol>
+<li>
+<p>関数の入出力についてのテスト</p>
+</li>
+<li>
+<p>関数の副作用についてのテスト</p>
+</li>
+<li>
+<p>複数の関数や処理の副作用による状態遷移についてのテスト</p>
+</li>
+</ol>
+<p>です。あと、もっと大きな、アプリケーション全体の振る舞いに関するテストもあるなあ……、とか思いながらも、とりあえずこの3つをDSLに書き下してみたのが以下の利用例 (件仕様) です。</p>
+<h4>(関数の引数・返り値についての)ユニットテスト</h4>
+<p>ここではある関数について、引数に対応する返り値を記述します。以下の例では整数かどうかを判定する関数のテストをしています。このときはこの種の確認を「ユニットテストとここでは呼ぶ」という気持ちでつくろうとしてたようです。</p>
+<pre><code class="language-lisp">(defun my-integer-p (n) ...)  ; a test subject
+
+(test :about &quot;A function my-integer-p returns t for integers&quot;
+  (test :unit #'my-integer-p
+    :input 0 :expect t)
+  (test :unit #'my-integer-p
+    :input &quot;aaa&quot; :expect nil)
+</code></pre>
+<h4>関数の副作用についてのテスト</h4>
+<p>これはある関数の実行前後の状態を記述するテストです。なんとなくRDBMSへのCRUD操作っぽい関数をテストしています。このときはこの種の確認を「アクションのテストとここでは呼ぶ」という気持ちでつくろうとしてました。</p>
+<pre><code class="language-lisp">(defun all-books () ...)
+(defun create-book (title author) ...)  ; a test subject
+
+(test :action &quot;A book created&quot;
+  :subject #'create-book
+  :input (&quot;The Hitchhiker's Guide to Galaxy&quot; &quot;Daglas Adams&quot;)
+  :expect :before (zero (length (all-books)))
+  :expect :after (= (length (all-books)) 1))
+</code></pre>
+<h4>複数の関数や処理の副作用による状態遷移についてのテスト</h4>
+<p>これは、書籍管理アプリのシナリオテストっぽいやつです。このあたりで「シナリオと呼ぶか振る舞いと呼ぶか」みたいな悩みを持った記憶があります。</p>
+<pre><code class="language-lisp">(test :about &quot;The book database application&quot;
+  (test :behavoir &quot;The user registers them book&quot;
+    :step &quot;The user gets an empty book list&quot;         ; make a label behavior-forms1 below. :step is temporal name...
+    forms...
+
+    :step &quot;The user registers a book&quot;
+    forms...
+
+    :step &quot;The user checks that the book is registered&quot;
+    forms...)
+
+  (test :bahavoir &quot;The user searches a book&quot;
+    ...))
+</code></pre>
+<hr />
+<p>用語をわざわざ定義しているのがなんだかちょっと恥ずかしいですが、そのような方針で実装をしていました。</p>
+<h3>実装</h3>
+<p>この実装はわりと早々に、次の節に記す理由で捨ててしまいますが、150行くらいで最初の括弧つきの「ユニットテスト」のようなものを実行できるようなものは作りました。以下がそのときのコードです。</p>
+<p><a href="https://github.com/t-sin/ethogram/blob/133410b452431d30416c9b5acbacc178ffce59b4/main.lisp">https://github.com/t-sin/ethogram/blob/133410b452431d30416c9b5acbacc178ffce59b4/main.lisp</a></p>
+<p>いきなりクラスをつくっていないあたり、謙虚でいいですね。いま見るとそれくらいしか褒めるところがありません。</p>
+<h3>テストフレームワーク自体のテスト、どうしよう</h3>
+<p>ところでここまでは勢いでただガッと作りました。もちろんテストは、いったん「ユニットテスト」をできるようになってから書こうとしました。</p>
+<p><strong>「テストを最初からしっかり書けば頓挫しないんじゃ」と思ったんじゃないのかよお前</strong>。</p>
+<p>理由のひとつはテストフレームワーク自体のテスト方法についてアイデアがなかったから、というものですが、わりと早めに思い至ったのは成長でしょうか。</p>
+<p>そんなあたりで<a href="https://github.com/t-sin/ethogram/blob/133410b452431d30416c9b5acbacc178ffce59b4/test/context-function.lisp">テストを書きはじめ</a>たものの、<strong>なんでお前はテストのためにまたテストフレームワークっぽいものつくってるんだアホか</strong>。</p>
+<p>そんなとき、<a href="https://github.com/lem-project/lem">Common Lisp製エディタLem</a>の作者の<a href="https://github.com/cxxxr">cxxxrさん</a>からこんな話をききます。</p>
+<p>曰く、Kent Beckの『テスト駆動開発』にはテストフレームワークのテストのしかたが書いてありますよ、と。</p>
+<h2>『テスト駆動開発』を読んでみた</h2>
+<p>もちろんこの本ですよ。</p>
+<p><a href="https://shop.ohmsha.co.jp/shopdetail/000000004967/">Kent Beck著、和田卓人訳『テスト駆動開発』</a></p>
+<p>そうするとさっそく買って読みはじめるわけです。即ポチ即読みです。お恥ずかしながらいままで読んでなかったのです。とはいえ最初は「XUnit」(この本で実装するテストフレームワーク。本の第2部での、第1部で解説されたTDDの実践編)をパラ見してただけなのですが、細かすぎるくらいのいわゆるTDDをやっていて、そこだけ読んでもあまりピンときませんでした。</p>
+<p>なので最初から全部読んでみたわけです。ええいこの際だ、勉強になるし、と。</p>
+<h3>Kent Beck『テスト駆動開発』、よい</h3>
+<p>それで読んでみたこの本、とてもよいわけですね。「テスト駆動開発」、いままで「なんかテストを書いて、落ちるのを見て、実装してテストを通すやつ」だと漠然と思っていました。そこに加えて前編で書いたような思いをもっていたわけです。</p>
+<p>しかし実際この本の第一部で通貨の為替プログラムを用いて紹介されXUnitの実装で実践のようすを見せられるのは、「自信を持てるていどの小さなステップで「レッド、グリーン、リファクタリング」のループを繰り返し確実に実装と設計を進めていく、という方法だったのです。</p>
+<p>いままで知ってた「テスト駆動開発」となにかが違う、しかも根本的に違う、と読んでいてひしひし感じました。</p>
+<h3>訳者解説が、よい</h3>
+<p>最後に置かれた和田卓人さんによる訳者解説がまた、とてもよいのです。</p>
+<p>本編で登場する「テスト」、世にいう「テスト」という語とはなんだか違う様相をしております。「テストは仕様を表すもので、仕様なので最初にまとめて書くものではないの？」というような疑問が浮んできたりなどします。ぼくはそうでした。その「テスト」の語が意味するところを、本編が書かれたときからの変化も含めて、TDD周辺の用語や概念を整理して解説したものが訳者解説の内容です。</p>
+<p>その内容のうちこの記事に関係するところのみをざっくりと書き表わすと以下のような感じです:</p>
+<ul>
+<li>TDDのTは本来の意味の「テスト」の一部でしかない
+<ul>
+<li>「ソフトウェアテスト」という語の中のほんの一部である</li>
+<li>TDDのTは実装や設計を補助する道具である
+<ul>
+<li>実装がこわれてないかを確認する</li>
+<li>期待する動作を書くことで設計を補助する</li>
+<li>頻繁に実行と書き換えを行うことで開発を加速する</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>BDDは上記「テスト」の語がもたらす混乱を解消するために語彙を改めたもの
+<ul>
+<li>TDDのTはコードの動作の&quot;checking&quot;である</li>
+<li>「テスト」の語をつかうので「エラーを発見する」ことが期待されたりする</li>
+<li>では「テスト」ではなく「振る舞い (behaviors)」と呼ぶ
+<ul>
+<li>この方針で語彙を整理したのがBDD (振る舞い駆動開発; Behavior-Driven Development)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>TDD/BDDが広まっていくにつれて原義が薄れていき「BDDは(ソフトウェア)テスト技法である」と認識されてしまっている</li>
+</ul>
+<p>要約すると、TDDもBDDも目指すところは本来同じであって、ソフトウェアテスト技法ではなく、実装と設計を加速させるための方法なのです。期待する動作をテストとして書き、それを動作させながら実装をすすめてテストを通し、そして最後にリファクタリングをする。の動作を繰り返すことで、書いているソフトウェアは頻繁に実行されるので動作について安心感が得られ、小さなステップで書かれたテストを通すのを目標にすることで着実に実装を進行させ、そして動作を確認するためのテストがあることでリファクタリングも気軽にできる。</p>
+<p>これが (これ以外のことも) 訳者解説に書いてあり、ここまでの認識がまさに「原義が薄れ」た知識に基いていたかを知るのです。</p>
+<p>最高の本であって、最高の訳者解説でございました。著者のKent Beckさん、そして訳者の和田卓人さん、ほんとうにありがとうございます。みんなも読もうぜ！</p>
+<h2>Lispとテスト駆動開発、それとREPL駆動開発</h2>
+<p>『テスト駆動開発』を読んだことによって、前半で述べた<em>Ethogram</em>は (用語の独自定義はさておき) 原義のTDD/BDDを実践できないと感じました。</p>
+<p>ところで原義のTDD、本と読みすすめているとかなり親近感がありました。ぼくが普段のCommon Lispでの開発をするときのようすをちょっと書き出してみましょう。</p>
+<ol>
+<li>Lemを立ち上げ、<code>M-x slime</code>でCommon LispのREPLを立ち上げる</li>
+<li>いまからつくりたいプログラムで使う (ただし要らなくなることもある) 小さい操作を妄想する</li>
+<li>その小さい操作がどのような動きをするかイメージする (ある引数に対して返り値がこう、とか)</li>
+<li>エディタでその関数を、すこし実装してみる (まずはベースケースとかから)</li>
+<li>その書いた関数を評価し、REPLで実行して動作をチェックする</li>
+<li>その関数が想定と違ううごきをしていたら、4に戻る</li>
+<li>想定した用途のほうが間違っていたら、3に戻る</li>
+<li>ソフトウェアが完成するまで2に戻りつづける</li>
+</ol>
+<p>Common LispやClojureはREPLがLSPよりも多機能で豪華ですので、立ち上げた処理系のランタイムとやりとりをしてデバッガなどを駆使しつつ、書いては実行、書いては実行をくりかえしてコードを実装していきます。よくRPEL駆動開発と言われてたりします。</p>
+<p>ところでこれ、なんか原義のTDDに似ていませんか？ というか細部の違いを無視するとほぼそのまんまですよね？</p>
+<p>そしてまた、REPL駆動開発ではたまに厄介な状況になることもあります。実装しているコードがある程度複雑になってくると、REPLで動的にあれこれできるとはいえ手動で事前条件を満たすように確認と準備をしたり、複雑な手順で確認を行ったりといった、REPLにはたしかに入力履歴があるので多少楽ではあるものの手動でやるにはちょっとつらい、みたいなことがしばしば起こります。6年以内のいつかのlispmeetupで「REPLで実行した確認をテストコードにしてくれればいいのに……」という言葉を聞いた記憶があります。</p>
+<p>ここまで書けばおわかりでしょう。Common Lisp使いやClojurianはREPLでTDDのTを確認しているわけです。</p>
+<p>実際、多機能なREPLのあるCommon LispやClojureではREPLで確認するのが手に追えなくなってくるあたりでテストを書く、とか聞く気がします。し、ぼくがテストを書きはじめるのはたいていそういうときです。</p>
+<p>「あっれ？　REPL駆動開発とTDD、じつはすごく相性のいいものなのでは？」</p>
+<p>これが、TDD本によって得られた学びに基いてCommon LispにおけるTDDのTを考えた結果です。</p>
+<h2>最新版の<em>Etoghram</em></h2>
+<p>原義のTDDから見直したREPL駆動開発、という観点で前半で述べた<em>Ethogram</em>を見直すと良し悪しが以下のようにありますね。</p>
+<ul>
+<li>TDD/BDDのテストは仕様ではない。けど、コードに期待する動作をテストとして書いておくと自動で動作を確認できてよい</li>
+<li>コードに期待する動作は完全な仕様ではない。けど、仕様の一部としてコードを読む助けにはなる</li>
+<li>REPLで気軽に再定義して実行できることは、TDDをとてもよくサポートしてくれる、なので実装・設計を促進できる</li>
+</ul>
+<p>どうでしょう。これが新しい<em>Ethogram</em>がベースアイデアです。さあ、既存の仕様とコードを捨て、新たなテストフレームワークをつくる時がやってきました。</p>
+<h3>思想</h3>
+<p>ただ、まだレッド・グリーン・リファクタリングループに入るのは早計です。設計思想を定めましょう。</p>
+<ol>
+<li><em>Ethogram</em>において「仕様 (specification)」とは「コードに期待するもの」のこととする
+<ol>
+<li>期待するものはたとえば、「実行例 (examples)」「実行前後の副作用 (sideeffects)」「簡単なシナリオによる状態の確認」</li>
+</ol>
+</li>
+<li><em>Ethogram</em>における「仕様」は、いわゆる「仕様書」ではない
+<ol>
+<li>「仕様書」や「設計書」は別途ドキュメントを書くこと
+<ol start="2">
+<li><em>Ethogram</em>の「仕様」は、コードの仕様やコードの挙動を理解するため補助として利用される</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><em>Ethogram</em>は「仕様」の意図がわかるようなDSLを提供する</li>
+<li><em>Eghogram</em>の「仕様」DSLは書くのに時間がかかりすぎるような煩わしい構文としない</li>
+<li><em>Ethogram</em>の「仕様」はREPLで即座に定義して実行できるし、即座に再定義できる</li>
+</ol>
+<p>というかこれ、いままで脳内にはあったものの書き出してないものでした。あとでGitHubのREADME.mdにも書いておきます。</p>
+<p>ちなみに「<em>Ethogram</em>における『仕様』」なんて誤解を招きそうな言葉を使っているのは<code>defspec</code>マクロのせいです。これをいま書き出していて<code>defspec</code>は仕様ではないから名前が適切ではないという気持ちになってきたので、あとで変えます。せっかく&quot;ethogram&quot; (動物行動学における研究対象の行動パターンを記録した目録; もちろんBDDをイメージしている) といういい名前をしているので&quot;catalogue&quot;とかにしてもいいんですが、<code>defcatalogue</code>って長いんですよね。それがいったん<code>defspec</code>にしている理由です。<code>defgram</code>……？？</p>
+<h3>現状</h3>
+<p>・…と、ここまで述べてきた内容を踏まえているのがこちらです:</p>
+<ul>
+<li><a href="https://github.com/t-sin/ethogram/tree/a0fd1cd30e6689bee4193bd626b3a0c146c94c7a">https://github.com/t-sin/ethogram/tree/a0fd1cd30e6689bee4193bd626b3a0c146c94c7a</a></li>
+</ul>
+<p>以下のようなテストを記述できます:</p>
+<pre><code class="language-lisp">(defspec &quot;a function to check number's oddness&quot;
+  :subject #'oddp
+
+  (examples :function
+    :returns t :for 1)
+
+  (examples :function
+    :about &quot;first argument is an odd number&quot;
+    :returns nil :for 0
+    :returns nil :for 2
+    :returns nil :for 10)
+
+  (examples :group
+    :about &quot;first argument is not an odd number&quot;
+    (examples :function
+      :about &quot;non-zero numbers&quot;
+      :returns t
+      :for 1
+      :for 3
+      :for 1001)
+    (examples :function
+      :about &quot;a zero&quot;
+      :returns t
+      :for 0)))
+</code></pre>
+<p>初期の面影をのこしつつ、もうちょっとTDD寄りの記述になっているのではと思っています。</p>
+<p>現状は関数の入出力を確認できるだけの状態で、まだREPLでの実行は想定していないコードです。が、<a href="https://github.com/t-sin/ethogram/blob/a0fd1cd30e6689bee4193bd626b3a0c146c94c7a/test/ethogram.lisp"><code>ethogram/test/ethogram.lisp</code></a>を見てわかるようにまさしくTDD本そのまんまな方法で実装されていっています。</p>
+<p>副作用の記述方法を考えている最中ですが、そこまで到達すると現状のテストを自分自身で実行できるようになると思っているので、既存テストの置き換えを達成した時点で<code>v0.1.0</code>にしようと思っています。</p>
+<p>ここ11月の末ごろにインフルかコロナかで40度の高熱をだしていたのと、その後の後遺症めいた体調不良により実装が停滞していますが (この記事を書くのもね！) 、ぼくはなによりもEthgramがほしいので優先して開発していくつもりです。</p>
+<h3>今後のこと</h3>
+<p>現状TODOリストを更新しながら実装していますが、<code>v0.1.0</code>以降でどう発展させていくかはまだあまり考えていません。まあTDD的にはテスト書いて設計を揉みながら進めればいいのですが。ただ、机上で作るだけでは実際に使ったときの不足するものがわからないので、<code>v0.1.0</code>になったら何か実際にプロジェクトに使ってみながら設計と実装をしていこうと考えています。何がいいかな……、ゲームボーイエミュレータとかいいんじゃかな……。</p>
+<p>いまのところ、前半で書いていた「やらないこと」にあった「期待値を記述する方法」や「モック方法」「fixtureライブラリ」はやらないつもりでしたが、Ethogramの将来の形によってはほしくなってしまうかもしれないです。fixtureライブラリとか、あると便利ですよね。</p>
+<p>余談ですが、定義マクロが<code>defspec</code>なのはいつかプロパティベーステストのしくみを入れて<code>defprop</code>をつくろうかなあと思っているからというのもあります。プロパティベーステストってなんぞや、という方には<a href="https://www.lambdanote.com/collections/proper-erlang-elixir">ラムダノート社の『実践プロパティベーステスト - PropErとErlang/Elixirではじめよう』(Fred Hebert著、山口能迪訳)</a>を紹介しておきます。少しづつ読んでいるのですが、いい本です (これも11月の高熱で止まってます……)。</p>
+<h2>おわりに</h2>
+<p>前職や現職で触れたGinkgo、RSpecたちBDDスタイルのテストフレームワークと過去の実体験の中でのテストの有り様、そして『テスト駆動開発』を経由して、「テスト」について考え直すいい機会を得ることができました。おかげで<em>Ethogram</em>についてもよい方針に辿りつけたと思っています。</p>
+<p><em>Ethgram</em>をとてもいいものにしたいです。そして<em>Ethogram</em>を踏み台にしてよりよいたのしいプログラムをもりもりと開発したいです。はやく使えるようになってくれ〜<em>Ethogram</em>ぅ〜〜。</p>
+<p>でも、自信を持てる小さなステップを繰り返していくことはお忘れなきよう。</p>
+<p>以上でおわりです。</p>
+
+</article>
+
+
+      <div id="page-info">
+        <p>
+テストフレームワークをつくっているのでその動機とか試行錯誤とか途中経過とかを書きます。長くなったので前後編に分け、これは後編です。
+</p>
+        
+        <p>
+          タグ:
+          
+          <a href="プログラミング.html">プログラミング</a>
+          ,
+          
+          <a href="テスト駆動開発.html">テスト駆動開発</a>
+          ,
+          
+          <a href="Lisp.html">Lisp</a>
+          ,
+          
+          <a href="Common Lisp.html">Common Lisp</a>
+          ,
+          
+          <a href="自作.html">自作</a>
+          
+          
+        </p>
+        
+        <p>作成日時: 2023-12-22T20:22:05.715884+09:00</p>
+        <p>更新日時: -</p>
+      </div>
+
+      
+<nav>
+  <div class="article-nav nav-left">
+    <p class="nav-label">1つ新しい記事</p>
+    
+    <a href="2023-12-15_testing-framework-ethogram-in-progress-01.html">テストフレームワークをつくる決意をするまで: 前編</a>
+    
+  </div>
+
+  <div class="article-nav nav-right">
+    <p class="nav-label">1つ古い記事</p>
+    
+    -
+    
+  </div>
+</nav>
+
+    </div>
+
+    <footer>
+      <hr>
+      <p><a href="https://github.com/t-sin/t-sin.github.io">Here is the source code of this site.</a></p>
+    </footer>
+  </body>
+</html>
